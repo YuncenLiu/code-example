@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.liuyuncen</groupId>
+    <artifactId>cloud</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>static-api</module>
+        <module>thread</module>
+        <module>db</module>
+        <module>nexus</module>
+        <module>scheduler</module>
+    </modules>
+
+
+<!--
+    <repositories>
+        <repository>
+            <id>xiang-nexus</id>
+            <url>http://192.168.58.15:8081/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    &lt;!&ndash;该配置是为了防止pom中的jar包从私服下载之后，但是执行mvn中从插件还是从中央仓库中下载&ndash;&gt;
+    <pluginRepositories>
+        <pluginRepository>
+            <id>xiang-nexus</id>
+            <url>http://192.168.58.15:8081/repository/maven-public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>xiang-nexus</id>
+            <url>http://192.168.58.15:8081/repository/maven-releases//</url>
+            <name>nexus私服中宿主仓库->存放/下载稳定版本的构件</name>
+        </repository>
+        <snapshotRepository>
+            <id>xiang-nexus</id>
+            <url>http://192.168.58.15:8081/repository/maven-snapshots/</url>
+            <name>nexus私服中宿主仓库->存放/下载快照版本的构件</name>
+        </snapshotRepository>
+    </distributionManagement>
+-->
+
+</project>
