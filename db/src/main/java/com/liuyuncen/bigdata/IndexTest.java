@@ -1,4 +1,4 @@
-package com.liuyuncen;
+package com.liuyuncen.bigdata;
 
 import java.util.Date;
 

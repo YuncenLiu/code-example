@@ -1,4 +1,4 @@
-package com.liuyuncen;
+package com.liuyuncen.bigdata;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
