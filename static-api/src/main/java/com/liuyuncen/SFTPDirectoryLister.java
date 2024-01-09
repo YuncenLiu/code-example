@@ -22,9 +22,9 @@ public class SFTPDirectoryLister {
     public static void main(String[] args) {
         String host = "10.6.128.108";
         int port = 22;
-        String username = "hengying";
-        String password = "RxdF71B7";
-        String remoteDirectory = "/hengying/";
+        String username = "data_sftp";
+        String password = "CbJvf9BLx3FJVSMf";
+        String remoteDirectory = "/";
 
         try {
             JSch jsch = new JSch();
@@ -67,6 +67,9 @@ public class SFTPDirectoryLister {
                     String subDirectory = directory + filename + "/";
                     listFilesRecursively(channel, subDirectory);
                 } else {
+
+
+
                     System.out.println("TIME:" + format + "File: " + directory + filename);
                 }
             }

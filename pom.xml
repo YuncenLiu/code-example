@@ -14,6 +14,7 @@
         <module>db</module>
         <module>nexus</module>
         <module>scheduler</module>
+        <module>leet-code</module>
     </modules>
 
 
