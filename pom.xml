@@ -15,6 +15,7 @@
         <module>nexus</module>
         <module>scheduler</module>
         <module>leet-code</module>
+        <module>static-poi-api</module>
     </modules>
 
 
