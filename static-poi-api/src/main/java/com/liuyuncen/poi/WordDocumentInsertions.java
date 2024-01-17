@@ -10,15 +10,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WordDocumentInsertion {
+public class WordDocumentInsertions {
     public static void main(String[] args) {
         try {
 
             List<String> pathLists = new ArrayList<>();
             pathLists.add("/Users/xiang/Desktop/1.docx");
-//            pathLists.add("/Users/xiang/Desktop/2.docx");
-//            pathLists.add("/Users/xiang/Desktop/3.docx");
-//            pathLists.add("/Users/xiang/Desktop/4.docx");
+            pathLists.add("/Users/xiang/Desktop/2.docx");
+            pathLists.add("/Users/xiang/Desktop/3.docx");
+            pathLists.add("/Users/xiang/Desktop/4.docx");
 
 
             String source = "/Users/xiang/Desktop/merge.docx"; // word2.docx文档路径
