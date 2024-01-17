@@ -11,45 +11,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WordDocumentInsertions {
+
     public static void main(String[] args) {
+
+        List<String> pathLists = new ArrayList<>();
+        pathLists.add("/Users/xiang/Desktop/1.docx");
+        pathLists.add("/Users/xiang/Desktop/2.docx");
+        pathLists.add("/Users/xiang/Desktop/3.docx");
+        pathLists.add("/Users/xiang/Desktop/4.docx");
+
+        String mergePath = "/Users/xiang/Desktop/merge.docx";
+
         try {
+            // 创建一个空的合并文档
+            XWPFDocument mergeDoc = new XWPFDocument();
 
-            List<String> pathLists = new ArrayList<>();
-            pathLists.add("/Users/xiang/Desktop/1.docx");
-            pathLists.add("/Users/xiang/Desktop/2.docx");
-            pathLists.add("/Users/xiang/Desktop/3.docx");
-            pathLists.add("/Users/xiang/Desktop/4.docx");
+            // 遍历所有输入文件路径
+            for (String filePath : pathLists) {
+                FileInputStream fis = new FileInputStream(filePath);
+                XWPFDocument doc = new XWPFDocument(fis);
 
-
-            String source = "/Users/xiang/Desktop/merge.docx"; // word2.docx文档路径
-            XWPFDocument sourceDocument = new XWPFDocument(new FileInputStream(source));
-
-
-            List<XWPFDocument> documentList = new ArrayList<>();
-            for (String pathList : pathLists) {
-                documentList.add(new XWPFDocument(new FileInputStream(pathList)));
-            }
-
-
-            for (XWPFDocument xwpfDocument : documentList) {
-                for (XWPFParagraph paragraph : xwpfDocument.getParagraphs()) {
-                    XWPFParagraph newParagraph = sourceDocument.createParagraph();
+                // 遍历输入文档的段落
+                List<XWPFParagraph> paragraphs = doc.getParagraphs();
+                for (XWPFParagraph paragraph : paragraphs) {
+                    // 复制段落到合并文档中
+                    XWPFParagraph newParagraph = mergeDoc.createParagraph();
                     newParagraph.getCTP().setPPr(paragraph.getCTP().getPPr());
-                    for (XWPFRun run : paragraph.getRuns()) {
+                    List<XWPFRun> runs = paragraph.getRuns();
+                    for (XWPFRun run : runs) {
                         XWPFRun newRun = newParagraph.createRun();
                         newRun.getCTR().setRPr(run.getCTR().getRPr());
                         newRun.setText(run.getText(0));
                     }
                 }
+
+                fis.close();
+                doc.close();
             }
 
-            // 保存修改后的word1.docx文档
-            FileOutputStream out = new FileOutputStream(source);
-            sourceDocument.write(out);
-            out.close();
+            // 将合并后的文档保存到目标路径
+            FileOutputStream fos = new FileOutputStream(mergePath);
+            mergeDoc.write(fos);
 
-            System.out.println("内容插入成功！");
-        } catch (IOException  e) {
+            fos.close();
+            mergeDoc.close();
+
+            System.out.println("合并完成！");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
