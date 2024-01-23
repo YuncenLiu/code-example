@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ExtractImagesFromWord {
     public static void main(String[] args) {
         try {
-            String documentPath = "/Users/xiang/Desktop/project.docx"; // word2.docx文档路径
+            String documentPath = "/Users/xiang/Desktop/1-1.docx"; // word2.docx文档路径
 
             // 打开word2.docx文档
             XWPFDocument document = new XWPFDocument(new FileInputStream(documentPath));

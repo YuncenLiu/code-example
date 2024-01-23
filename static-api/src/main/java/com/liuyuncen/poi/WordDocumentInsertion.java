@@ -11,8 +11,8 @@ import java.util.List;
 public class WordDocumentInsertion {
     public static void main(String[] args) {
         try {
-            String document1Path = "/Users/xiang/Desktop/word1.docx"; // word1.docx文档路径
-            String document2Path = "/Users/xiang/Desktop/project.docx"; // word2.docx文档路径
+            String document1Path = "/Users/xiang/Desktop/1-1.docx"; // word1.docx文档路径
+            String document2Path = "/Users/xiang/Desktop/2-1.docx"; // word2.docx文档路径
 
             // 打开word1.docx文档
             XWPFDocument document1 = new XWPFDocument(new FileInputStream(document1Path));
