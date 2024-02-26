@@ -32,8 +32,8 @@ public class addTest {
     }
 
     public static void main(String[] args) {
-        final int batchSize = 4000000;
-        List<IndexTest> testDataList = generateTestData(4000000);
+        final int batchSize = 2;
+        List<IndexTest> testDataList = generateTestData(2);
 
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(getDataSource());

@@ -15,7 +15,7 @@ import java.util.List;
 public class GetData {
 
     public static void main(String[] args) throws Exception {
-        String filePath = "/Users/xiang/Desktop/IRR.csv";
+        String filePath = "/Users/xiang/Desktop/IRR2.csv";
         GetData getData = new GetData();
         List<String[]> csvData = getData.readCSV(filePath);
         int i = 0;
