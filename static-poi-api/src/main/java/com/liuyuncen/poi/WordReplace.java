@@ -1,11 +1,10 @@
 package com.liuyuncen.poi;
 
-import com.deepoove.poi.XWPFTemplate;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
+import java.io.FileInputStream;
 
 /**
  * @belongsProject: 测试平台
@@ -16,11 +15,34 @@ import java.util.HashMap;
  * @version: 1.0
  */
 public class WordReplace {
-    public static void main(String[] args) throws IOException {
-        XWPFTemplate template = XWPFTemplate.compile("/Users/xiang/Desktop/1.docx").render(
-                new HashMap<String, Object>(){{
-                    put("pch", "2023年第一季度");
-                }});
-        template.writeAndClose(Files.newOutputStream(Paths.get("/Users/xiang/Desktop/2.docx")));
+    public static void main(String[] args) {
+        try {
+            // 读取 Word 文档
+            FileInputStream fis = new FileInputStream("/Users/xiang/Desktop/临时文件夹/经营性分析测试文档/target.docx");
+            XWPFDocument document = new XWPFDocument(fis);
+
+            // 遍历文档中的段落
+            for (XWPFParagraph paragraph : document.getParagraphs()) {
+                for (XWPFRun run : paragraph.getRuns()) {
+                    String text = run.getText(0);
+                    System.out.println("text = " + text);
+//                    if (text != null && text.contains("pch")) {
+//                        text = text.replace("pch", "123");
+//                        run.setText(text, 0);
+//                    }
+                }
+            }
+
+            // 保存修改后的文档
+//            FileOutputStream fos = new FileOutputStream("/Users/xiang/Desktop/2.docx");
+//            document.write(fos);
+
+            document.close();
+            fis.close();
+//            fos.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

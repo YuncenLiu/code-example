@@ -2,6 +2,12 @@ package com.liuyuncen;
 
 import lombok.SneakyThrows;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 /**
  * @belongsProject: 测试平台
  * @belongsPackage: com.liuyuncen
@@ -11,12 +17,39 @@ import lombok.SneakyThrows;
  * @version: 1.0
  */
 public class Test {
+
+    public static Set<Long> sets = new HashSet<>();
     @SneakyThrows
     public static void main(String[] args) {
-        String  sql = "[F1_JG_B1.B45.BQ]=[F1_JG_B1.B7.BQ]+[F1_JG_B1.B8.BQ]+[F1_JG_B1.B9.BQ]+[F1_JG_B1.B10.BQ]+[F1_JG_B1.B11.BQ]+[F1_JG_B1.B12.BQ]+[F1_JG_B1.B13.BQ]+[F1_JG_B1.B14.BQ]+[F1_JG_B1.B15.BQ]+[F1_JG_B1.B16.BQ]+[F1_JG_B1.B17.BQ]+[F1_JG_B1.B18.BQ]+[F1_JG_B1.B19.BQ]+[F1_JG_B1.B20.BQ]+[F1_JG_B1.B21.BQ]+[F1_JG_B1.B22.BQ]+[F1_JG_B1.B23.BQ]+[F1_JG_B1.B24.BQ]+[F1_JG_B1.B25.BQ]+[F1_JG_B1.B26.BQ]+[F1_JG_B1.B27.BQ]+[F1_JG_B1.B28.BQ]+[F1_JG_B1.B29.BQ]+[F1_JG_B1.B30.BQ]+[F1_JG_B1.B31.BQ]+[F1_JG_B1.B32.BQ]+[F1_JG_B1.B33.BQ]";
-        String all = sql.replace("[F1_JG_B1.B45.BQ]", "all");
-        System.out.println(all);
+        for (int i = 0; i < 10; i++) {
+            Test test = new Test();
+            test.test();
+        }
+
 
     }
 
+    @SneakyThrows
+    public void test(){
+        Test test = new Test();
+
+        for (int i = 0; i < 10000; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    sets.add(test.getUid());
+                }
+            }).start();
+        }
+
+        Thread.sleep(2000);
+        System.out.println("sets = " + sets.size());
+    }
+    public synchronized long getUid(){
+        long timestampMillis = System.currentTimeMillis();
+        Date data = new Date();
+        SimpleDateFormat sim = new SimpleDateFormat("yyyy");
+        String uuid = String.valueOf(UUID.randomUUID().getMostSignificantBits());
+        return Long.parseLong(sim.format(data) + String.valueOf(timestampMillis).substring(4)+uuid.substring(5,11));
+    }
 }

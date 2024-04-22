@@ -5,7 +5,6 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 
 /**
  * @belongsProject: 测试平台
@@ -19,27 +18,28 @@ public class WordReplace {
     public static void main(String[] args) {
         try {
             // 读取 Word 文档
-            FileInputStream fis = new FileInputStream("/Users/xiang/Desktop/1.docx");
+            FileInputStream fis = new FileInputStream("/Users/xiang/Desktop/临时文件夹/经营性分析测试文档/1.docx");
             XWPFDocument document = new XWPFDocument(fis);
 
             // 遍历文档中的段落
             for (XWPFParagraph paragraph : document.getParagraphs()) {
                 for (XWPFRun run : paragraph.getRuns()) {
                     String text = run.getText(0);
-                    if (text != null && text.contains("pch")) {
-                        text = text.replace("pch", "123");
-                        run.setText(text, 0);
-                    }
+                    System.out.println("text = " + text);
+//                    if (text != null && text.contains("pch")) {
+//                        text = text.replace("pch", "123");
+//                        run.setText(text, 0);
+//                    }
                 }
             }
 
             // 保存修改后的文档
-            FileOutputStream fos = new FileOutputStream("/Users/xiang/Desktop/2.docx");
-            document.write(fos);
+//            FileOutputStream fos = new FileOutputStream("/Users/xiang/Desktop/2.docx");
+//            document.write(fos);
 
-            fis.close();
-            fos.close();
             document.close();
+            fis.close();
+//            fos.close();
 
             System.out.println("替换完成");
         } catch (Exception e) {
