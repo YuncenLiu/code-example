@@ -19,7 +19,7 @@ import java.util.Date;
  */
 public class CronTest {
     public static void main(String[] args) {
-        String cronExpression = "0 * * * * ?"; // 每两小时一次的 Cron 表达式
+        String cronExpression = "0 1 * * * ? *"; // 每两小时一次的 Cron 表达式
         SimpleDateFormat simd = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -28,6 +28,7 @@ public class CronTest {
 
 
             LocalDateTime now = LocalDateTime.now().plusDays(1);;
+
 
             Date tomorrowDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
             String tomorrowStr = simd.format(tomorrowDate);
