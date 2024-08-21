@@ -4,7 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -18,62 +17,61 @@ import java.sql.SQLException;
  */
 public class Transfrom {
 
-    public static DataSource getDataSourceA() {
+    public static DataSource getDataSourcePro() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
-        dataSource.setUrl("jdbc:oracle:thin:@term.klhic.com:9029/fktestdb");
-        dataSource.setUsername("mnwtn03y");
-        dataSource.setPassword("xJl9cwn0f");
+        dataSource.setUrl("jdbc:oracle:thin:@term.klhic.com:9044/riskdb");
+        dataSource.setUsername("gemaaa");
+        dataSource.setPassword("UWVvJyywS");
         return dataSource;
     }
 
-    public static DataSource getDataSourceB() {
+    public static DataSource getDataSourceTest() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
         dataSource.setUrl("jdbc:oracle:thin:@term.klhic.com:9029/fktestdb");
-        dataSource.setUsername("mnwtn03y");
-        dataSource.setPassword("xJl9cwn0f");
+        dataSource.setUsername("4rmf5bhv");
+        dataSource.setPassword("DCK0s8LSc");
         return dataSource;
     }
 
 
     public static void main(String[] args) {
-        JdbcTemplate jdbcTemplatea = new JdbcTemplate(getDataSourceA());
-        JdbcTemplate jdbcTemplateb = new JdbcTemplate(getDataSourceA());
-        System.out.println("jdbcTemplate = " + jdbcTemplatea);
-        String sql = "SELECT ID_,BYTES_ FROM ACT_GE_BYTEARRAY WHERE BYTES_ IS NOT null"; // Your SQL query here
+
+    }
+
+    public static void transferByteArray() {
+        JdbcTemplate jdbcTemplatePro = new JdbcTemplate(getDataSourcePro());
+        JdbcTemplate jdbcTemplateTest = new JdbcTemplate(getDataSourceTest());
+
+        String sqlSelect = "SELECT BYTES_ FROM risk.ACT_GE_BYTEARRAY where ID_ ='2135102' ";
+        byte[] bytes = jdbcTemplatePro.queryForObject(sqlSelect, byte[].class);
+
+        if (bytes != null) {
+            String sqlInsert = "INSERT INTO FKTEST01.ACT_GE_BYTEARRAY_20240627 (BYTES_) VALUES (?)";
+            jdbcTemplateTest.update(sqlInsert, bytes);
+            System.out.println("Data transferred successfully.");
+        } else {
+            System.out.println("No data found in source database.");
+        }
+    }
+
+    public static void dataSync(){
+        JdbcTemplate jdbcTemplatePro = new JdbcTemplate(getDataSourcePro());
+        JdbcTemplate jdbcTemplateTest = new JdbcTemplate(getDataSourceTest());
+        String sql = "SELECT ID_ FROM risk.ACT_HI_COMMENT"; // Your SQL query here
 
         // Execute query and process the result
-        jdbcTemplatea.query(sql, (ResultSet rs) -> {
+        jdbcTemplatePro.query(sql, (ResultSet rs) -> {
             try {
-                Blob blob = rs.getBlob("BYTES_");
-                String id_ = rs.getString("ID_");
+                String id = rs.getString("ID_");
 
-                String insertSql = "INSERT INTO ACT_GE_BYTEARRAY_20240624 (ID_,BYTES_) VALUES (?, ?)";
-                jdbcTemplateb.update(insertSql, id_, blob);
+                String sqlSelect = "SELECT FULL_MSG_ FROM risk.ACT_HI_COMMENT where ID_ ='"+id+"' ";
+                byte[] bytes = jdbcTemplatePro.queryForObject(sqlSelect, byte[].class);
+                String sqlInsert = "update FKTEST01.ACT_HI_COMMENT set FULL_MSG_ = ? where ID_= ?";
+                jdbcTemplateTest.update(sqlInsert, bytes,id);
+                System.out.println("Data transferred successfully.");
 
-//                if (blob != null) {
-//                    try (InputStream inputStream = blob.getBinaryStream()) {
-//                        byte[] bytes = new byte[1024]; // or appropriate buffer size
-//                        int length;
-//                        StringBuilder sb = new StringBuilder();
-//                        while ((length = inputStream.read(bytes)) != -1) {
-//                            sb.append(new String(bytes, 0, length));
-//                        }
-//                        String blobAsString = sb.toString();
-//                        System.out.println("id_ = " + id_);
-//                        System.out.println("Blob data as string: " + blobAsString);
-//
-//
-//
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                        // Handle IOException
-//                    }
-//                } else {
-//                    System.out.println("BYTES_ field is null.");
-//                    // Handle null case
-//                }
             } catch (SQLException e) {
                 e.printStackTrace();
                 // Handle SQLException
