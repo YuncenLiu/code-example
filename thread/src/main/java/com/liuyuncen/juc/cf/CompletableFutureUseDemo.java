@@ -17,19 +17,30 @@ public class CompletableFutureUseDemo {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         CompletableFuture.supplyAsync(() -> {
             System.out.println(Thread.currentThread().getName() + " ----- come in ");
+
             int result = ThreadLocalRandom.current().nextInt(10);
+
             try {
                 TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             System.out.println(" ----- 2 秒后出结果 ---- " + result);
+            if (result > 0) {
+                int i = 10/0;
+            }
             return result;
         }).whenComplete((v,e) ->{
+            // 无论是否异常，都会执行这里面当方法
+            System.out.println("--- 计算完成，无论是否异常都会打印: "+ v);
             if (null == e) {
+                // 只有非异常情况，才会走这里面
                 System.out.println("--- 计算完成，更新系统 updateValue: "+ v);
             }
+
         }).exceptionally(e -> {
+            // 当出现异常时候，会执行这里当方法
+
             e.printStackTrace();
             System.out.println("异常情况"+e.getCause() + " ---- " + e.getMessage());
             return null;
