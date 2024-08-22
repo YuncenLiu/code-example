@@ -14,6 +14,7 @@ public class CompletableFutureBuildDemo {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         ExecutorService threadPool = Executors.newFixedThreadPool(3);
+/*
 
         CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
             System.out.println(Thread.currentThread().getName());
@@ -23,10 +24,23 @@ public class CompletableFutureBuildDemo {
                 throw new RuntimeException(e);
             }
         }, threadPool);
-
         System.out.println(completableFuture.get());
         System.out.println("----- hello ");
+*/
 
+        CompletableFuture<String> completableFuture  = CompletableFuture.supplyAsync(() -> {
+            System.out.println(Thread.currentThread().getName());
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return "Hello SupplyAsync";
+        },threadPool);
 
+        System.out.println(completableFuture.get());
+
+        // 没有关闭会导致程序挂起
+        threadPool.shutdown();
     }
 }
