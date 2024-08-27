@@ -1,5 +1,8 @@
 package com.liuyuncen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @belongsProject: 测试平台
  * @belongsPackage: com.liuyuncen
@@ -10,16 +13,12 @@ package com.liuyuncen;
  */
 public class ThreadTest {
     public static void main(String[] args) {
-        IntervalThread intervalThread = new IntervalThread(5); // 每隔5秒执行一次任务
-        Thread thread = new Thread(intervalThread);
-        thread.start();
+        List<Integer> list = new ArrayList<>();
+        String abc = "123";
+        for (int i = 0; i < 100; i++) {
 
-        // 在需要的时候关闭线程
-        try {
-            Thread.sleep(45000); // 等待15秒
-            intervalThread.stop(); // 关闭线程
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+
+
     }
 }

@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
  * 6、两个对象，一个静态、一个普通，谁先打印
  * 7、一个对象，一个静态、一个普通方法，谁先打印
  *
+ * 1-2 一个
+ *
  * @belongsProject: 测试平台
  * @belongsPackage: com.liuyuncen.juc.locks
  * @author: Xiang想
