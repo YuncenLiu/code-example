@@ -1,12 +1,11 @@
 package com.liuyuncen.juc.interrupt;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class InterruptDemo {
 
+    // volatile 修饰的变量，具备了可见性，在高并发下面，通过修改变量状态，决定程序的运行。
     static volatile boolean isStop = false;
     static AtomicBoolean atomicBoolean = new AtomicBoolean(false);
     public static void main(String[] args) throws InterruptedException {

@@ -17,6 +17,7 @@
         <module>leet-code</module>
         <module>static-poi-api</module>
         <module>send-mail</module>
+        <module>springboot-module</module>
     </modules>
 
 
