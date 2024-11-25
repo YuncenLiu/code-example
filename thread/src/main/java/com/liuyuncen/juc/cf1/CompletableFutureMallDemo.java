@@ -1,4 +1,4 @@
-package com.liuyuncen.juc.cf;
+package com.liuyuncen.juc.cf1;
 
 import lombok.Getter;
 

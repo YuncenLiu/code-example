@@ -1,4 +1,4 @@
-package com.liuyuncen.juc.cf;
+package com.liuyuncen.juc.cf1;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -26,9 +26,9 @@ public class CompletableFutureUseDemo {
                 throw new RuntimeException(e);
             }
             System.out.println(" ----- 2 秒后出结果 ---- " + result);
-            if (result > 0) {
-                int i = 10/0;
-            }
+//            if (result > 0) {
+//                int i = 10/0;
+//            }
             return result;
         }).whenComplete((v,e) ->{
             // 无论是否异常，都会执行这里面当方法
