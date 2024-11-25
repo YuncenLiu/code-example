@@ -1,8 +1,5 @@
 package com.liuyuncen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * book: https://github.com/YuncenLiu/code-example
  * @belongsProject: 测试平台
@@ -14,12 +11,9 @@ import java.util.List;
  */
 public class ThreadTest {
     public static void main(String[] args) {
-        List<Integer> list = new ArrayList<>();
-        String abc = "123";
-        for (int i = 0; i < 100; i++) {
+       new Thread(()->{
 
-        }
-
+       },"t1").start();
 
     }
 }

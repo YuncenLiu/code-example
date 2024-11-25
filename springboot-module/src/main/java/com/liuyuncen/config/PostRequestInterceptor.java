@@ -1,6 +1,5 @@
 package com.liuyuncen.config;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * @description: TODO
  * @version: 1.0
  */
-@Component
+//@Component
 public class PostRequestInterceptor implements HandlerInterceptor {
 
     @Override

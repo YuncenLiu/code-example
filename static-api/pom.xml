@@ -25,6 +25,11 @@
             <version>2.3.2</version> <!-- 版本号根据需要修改 -->
         </dependency>
 
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
 
         <!-- Vcard解析 -->
         <dependency>
