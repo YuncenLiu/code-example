@@ -9,6 +9,7 @@ public class InterruptDemo {
     static volatile boolean isStop = false;
     static AtomicBoolean atomicBoolean = new AtomicBoolean(false);
     public static void main(String[] args) throws InterruptedException {
+//        m2_atomicBoolean();
         Thread t1 = new Thread(() -> {
             while (true) {
                 if (Thread.currentThread().isInterrupted()) {
@@ -21,10 +22,10 @@ public class InterruptDemo {
         t1.start();
 
         TimeUnit.MILLISECONDS.sleep(1);
-//        new Thread(()->{
-//            t1.interrupt();
-//        },"t2").start();
-        t1.interrupt();
+        new Thread(()->{
+            t1.interrupt();
+        },"t2").start();
+//        t1.interrupt();
 
     }
 

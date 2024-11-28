@@ -3,6 +3,10 @@ package com.liuyuncen.juc.locks;
 import java.util.concurrent.Semaphore;
 
 /**
+ *  <pre> {@code
+ *  private final Semaphore semaphore = new Semaphore(1);
+ *  }</pre>
+ * {@link #lock()}
  * @belongsProject: 测试平台
  * @belongsPackage: com.liuyuncen.juc.locks
  * @author: Xiang想
