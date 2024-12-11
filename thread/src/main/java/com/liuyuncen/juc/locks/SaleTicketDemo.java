@@ -26,24 +26,35 @@ class Ticket{
     }
 }
 public class SaleTicketDemo {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
+        long s = System.currentTimeMillis();
+
+//        CountDownLatch countDownLatch = new CountDownLatch(3);
         // 模拟三名售票员卖票
         Ticket ticket = new Ticket();
         new Thread(() ->{
             for (int i = 0; i < 55; i++) {
                 ticket.sale();
             }
+//            countDownLatch.countDown();
         },"A").start();
         new Thread(() ->{
             for (int i = 0; i < 55; i++) {
                 ticket.sale();
             }
+//            countDownLatch.countDown();
         },"B").start();
         new Thread(() ->{
             for (int i = 0; i < 55; i++) {
                 ticket.sale();
             }
+//            countDownLatch.countDown();
         },"C").start();
+
+//        countDownLatch.await();
+
+        long e = System.currentTimeMillis();
+        System.out.println("耗时：" + (e-s) + " ms");
     }
 }
