@@ -12,6 +12,7 @@
         <module>static-api</module>
         <module>thread</module>
         <module>db</module>
+        <module>docker-module</module>
         <module>nexus</module>
         <module>scheduler</module>
         <module>leet-code</module>
