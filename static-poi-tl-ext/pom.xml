@@ -99,6 +99,16 @@
             <version>0.9.29</version>
         </dependency>
         <!--合并word，free免费版可以用，否则收费-->
+        <!--
+        mvn install:install-file
+        -Dfile=F:\studySpace\project\xiang\code-example\static-poi-tl-ext\src\main\resources\libs\spire.doc.free-5.2.0.jar
+        -DgroupId=e-iceblue
+        -DartifactId=spire.doc.free
+        -Dversion=5.2.0
+        -Dpackaging=jar
+        -DgeneratePom=true
+        -Dmaven.repo.local=D:\develop\apache-maven-3.5.4\repository
+        -->
         <dependency>
             <groupId>e-iceblue</groupId>
             <artifactId>spire.doc.free</artifactId>
