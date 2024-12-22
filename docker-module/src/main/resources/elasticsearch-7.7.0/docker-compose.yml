@@ -1,0 +1,33 @@
+version: '3'
+services:
+  elasticsearch:
+    image: registry.cn-beijing.aliyuncs.com/yuncenliu/elasticsearch:define-7.7.0
+    container_name: elasticsearch-define-770
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
+    # restart: always
+    volumes:
+      - "/data/elasticsearch-define-7.7.0/data:/usr/share/elasticsearch/data"
+      - "/data/elasticsearch-define-7.7.0/plugins:/usr/share/elasticsearch/plugins"
+  kibana:
+    image: registry.cn-beijing.aliyuncs.com/yuncenliu/kibana:7.7.0
+    container_name: kibana-770
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+  elasticsearchhead:
+    image: registry.cn-beijing.aliyuncs.com/yuncenliu/elasticsearch-head:6-bolingcavalry
+    container_name: elasticsearch-head-6
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 9100:9100
+    depends_on:
+      - elasticsearch
+# 启动
+# docker-compose up -d
