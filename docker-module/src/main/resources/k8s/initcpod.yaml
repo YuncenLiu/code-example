@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: initcpod-test
+  labels:
+    app: initcpod-test
+spec:
+  containers:
+    - name: initcpod-test
+      image: registry.cn-beijing.aliyuncs.com/yuncenliu/busybox:1.32.0
+      imagePullPolicy: Never
+      # 在运行 init-yun containers 之前要 执行完 sleep 3600 这个命令
+      command:
+        - 'sh'
+        - '-c'
+        - 'echo The app is running ! && sleep 3600'
+  initContainers:
+    - name: init-yun
+      image: registry.cn-beijing.aliyuncs.com/yuncenliu/busybox:1.32.0
+      imagePullPolicy: Never
+      command:
+        - 'sh'
+        - '-c'
+        - 'until nslookup yun-service; do echo waitting for yunService; sleep 2; done ;'
+    - name: init-db
+      image:  registry.cn-beijing.aliyuncs.com/yuncenliu/busybox:1.32.0
+      imagePullPolicy: Never
+      # 两种写法都可以
+      command: ['sh', '-c', 'until nslookup yun-db; do echo waitting for yun-db; sleep 2; done ;']
+  restartPolicy: Always

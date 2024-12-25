@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yun-tomcat-deploy
+  namespace: yun
+  labels:
+    app: yun-tomcat-deploy
+spec:
+  # 3个
+  replicas: 3
+  template:
+    metadata:
+      name: yun-tomcat-deploy
+      labels:
+        app: yun-tomcat-pod
+    spec:
+      containers:
+        - name: yun-tomcat-deploy
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/tomcat:9.0.20-jre8-alpine
+          # 一直从远程下载
+          imagePullPolicy: IfNotPresent
+          # 对外暴露端口，对其他应用暴露，这里还不是对用户暴露
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+      # 拉取是私有镜像用到的 认证
+      # 通过 kubectl create secret docker-registry aliyun-yuncen .... 创建
+      imagePullSecrets:
+        - name: aliyun-yuncen
+  selector:
+    matchLabels:
+      app: yun-tomcat-pod
+
+---
+# service 对集群外的用户使用
+apiVersion: v1
+kind: Service
+metadata:
+  name: yun-tomcat-service
+spec:
+  selector:
+    # 标签选择必须是 spec.template.labels.app
+    app: yun-tomcat-pod
+  ports:
+    - port: 8080      # 对集群内其他访问暴露端口
+      targetPort: 8080
+      nodePort: 30088   # 默认是 30000 - 32767 ，如果修改需要改 k8s 配置文件，官方不建议修改
+  type: NodePort

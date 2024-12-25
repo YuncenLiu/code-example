@@ -16,13 +16,17 @@ import java.io.FileReader;
  * @version: 1.0
  */
 public class JSONTest {
-    @SneakyThrows
     public static void main(String[] args) {
         // 创建 Gson 对象
         Gson gson = new Gson();
 
         // 读取 JSON 文件
-        JsonObject data = gson.fromJson(new FileReader("/Users/xiang/Desktop/test.json"), JsonObject.class);
+        JsonObject data = null;
+        try {
+            data = gson.fromJson(new FileReader("/Users/xiang/Desktop/test.json"), JsonObject.class);
+        }catch (Exception e){
+
+        }
 
         // 获取 COMCODE 值
         JsonArray dataArray = data.getAsJsonArray("data");

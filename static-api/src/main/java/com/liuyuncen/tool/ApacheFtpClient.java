@@ -53,9 +53,9 @@ public class ApacheFtpClient {
             System.out.println("FTP响应码："+ftpClient.getReplyCode());
             System.out.println("FTP响应信息："+ftpClient.getReplyString());
             if (!ftpClient.changeWorkingDirectory(remoteUploadDirectory)) {
-                log.info("没有目录:{}", remoteUploadDirectory);
+//                log.info("没有目录:{}", remoteUploadDirectory);
                 if (!ftpClient.makeDirectory(remoteUploadDirectory)) {
-                    log.info("创建文件目录【{}】 失败！", remoteUploadDirectory);
+//                    log.info("创建文件目录【{}】 失败！", remoteUploadDirectory);
                     return Pair.of(false, "创建文件目录【" + remoteUploadDirectory + "】 失败");
                 }
             }
@@ -72,11 +72,11 @@ public class ApacheFtpClient {
             //文件上传
             boolean b = ftpClient.storeFile(uploadFileName, fis);
             int replyCode = ftpClient.getReplyCode();
-            log.info("上传文件响应码：{}", replyCode);
-            log.info("上传文件响应信息：{}", ftpClient.getReplyString());
+//            log.info("上传文件响应码：{}", replyCode);
+//            log.info("上传文件响应信息：{}", ftpClient.getReplyString());
             return Pair.of(b, b ? "上传成功" : "上传失败");
         } catch (Exception e) {
-            log.error("FTP上传文件异常！:", e);
+//            log.error("FTP上传文件异常！:", e);
             return Pair.of(false, "上传文件异常");
         } finally {
             try {
@@ -84,7 +84,7 @@ public class ApacheFtpClient {
                     fis.close();
                 }
             } catch (IOException e) {
-                log.error("关闭流发生异常!", e);
+//                log.error("关闭流发生异常!", e);
             }
         }
     }
@@ -105,7 +105,7 @@ public class ApacheFtpClient {
             }
             //工作目录切换到下载文件的目录下
             if (!ftpClient.changeWorkingDirectory(remoteDownloadDirectory)) {
-                log.info("目录不存在：{}", remoteDownloadDirectory);
+//                log.info("目录不存在：{}", remoteDownloadDirectory);
                 return Pair.of(false, "目录不存在");
             }
             //获取目录下所有文件
@@ -125,7 +125,7 @@ public class ApacheFtpClient {
                     //下载
                     downloadFlag = ftpClient.retrieveFile(downloadFileName, out);
                     int replyCode = ftpClient.getReplyCode();
-                    log.info("下载文件响应码：{}", replyCode);
+//                    log.info("下载文件响应码：{}", replyCode);
                     break;
                 }
             }
@@ -134,7 +134,7 @@ public class ApacheFtpClient {
             }
             return Pair.of(downloadFlag, downloadFlag ? "下载成功" : "下载失败");
         } catch (Exception e) {
-            log.error("FTP下载文件异常！:", e);
+//            log.error("FTP下载文件异常！:", e);
             return Pair.of(false, "下载文件异常");
         } finally {
             try {
