@@ -27,12 +27,12 @@ public class ZipAndEncryptFiles {
 //                "/Users/xiang/Desktop/gc1.txt"
 //        };
         String[] filesToCompress = {
-                "/Users/xiang/Desktop/gc.txt"
+                "/Users/xiang/7/dev_s_meixin_sftp/chengbao/2024年08月22日.txt"
         };
 
 
         // 输出压缩文件的路径
-        String zipFilePath = "/Users/xiang/Desktop/gc.zip";
+        String zipFilePath = "/Users/xiang/7/dev_s_meixin_sftp/chengbao/2024年08月22日.zip";
 
         // 设置压缩包的密码
         String password = "1m[9Ba=Y0O<:";

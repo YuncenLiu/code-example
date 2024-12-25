@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-test
+spec:
+  replicas: 1  # 设置副本数
+  selector:
+    matchLabels:
+      app: tomcat-test
+  template:
+    metadata:
+      labels:
+        app: tomcat-test
+    spec:
+      containers:
+        - name: tomcat-yun
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/tomcat:9.0.20-jre8-alpine
+          ports:
+            - containerPort: 8080

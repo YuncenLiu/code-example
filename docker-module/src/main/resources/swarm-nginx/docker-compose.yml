@@ -1,0 +1,16 @@
+# docker stack deploy nginx-stack -c docker-compose.yml
+version: '3'
+services:
+  nginx-web:
+    image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.19.3-alpine
+    container_name: nginx
+    networks:
+      - nginx-net
+    ports:
+      - 80:80
+    deploy:
+      replicas: 5
+
+networks:
+  nginx-net:
+    driver: overlay

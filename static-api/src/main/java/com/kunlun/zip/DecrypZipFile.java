@@ -2,6 +2,7 @@ package com.kunlun.zip;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+
 /**
  * @belongsProject: 测试平台
  * @belongsPackage: com.kunlun.zip
@@ -12,8 +13,8 @@ import net.lingala.zip4j.exception.ZipException;
  */
 public class DecrypZipFile {
     public static void main(String[] args) {
-        String zipFilePath = "/Users/xiang/Desktop/gc.zip";
-        String destinationFolder = "/Users/xiang/Desktop/";
+        String zipFilePath = "/Users/xiang/7/dev_s_meixin_sftp/chengbao/2024年08月22日.zip";
+        String destinationFolder = "/Users/xiang/7/dev_s_meixin_sftp/chengbao/";
         String password = "1m[9Ba=Y0O<:";
 
         try {
