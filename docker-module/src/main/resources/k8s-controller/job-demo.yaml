@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-demo
+  labels:
+    app: job-demo
+spec:
+  template:
+    metadata:
+      name: job-demo
+      labels:
+        app: job-demo
+    spec:
+      containers:
+        - name: job-demo
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/perl:slim
+          command: ['perl', '-Mbignum=bpi', '-wle', 'print bpi(6000)']
+          imagePullPolicy: IfNotPresent
+      # 重启策略必须是 spec.template.spec.restartPolicy: Required value: valid values: "OnFailure", "Never"
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: aliyun-yuncen
+# 不能有 selector
+#  selector:
+#    matchLabels:
+#      app: job-demo
