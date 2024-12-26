@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: daemon-set-demo
+  labels:
+    app: daemon-set-demo
+spec:
+   # replicas: 1 ,每个节点一个，肯定不是 副本1 ，当设置 kind 为 DaemonSet时候，IDEA会提示
+  template:
+    metadata:
+      name: daemon-set-demo
+      labels:
+        app: daemon-set-demo
+    spec:
+      containers:
+        - name: daemon-set-demo
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.17.10-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: aliyun-yuncen
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: daemon-set-demo

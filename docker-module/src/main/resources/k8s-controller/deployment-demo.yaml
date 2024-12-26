@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-demo
+  labels:
+    app: deployment-demo
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: deployment-demo
+      labels:
+        app: deployment-demo
+    spec:
+      containers:
+        - name: deployment-demo
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.17.10-alpine
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: aliyun-yuncen
+  selector:
+    matchLabels:
+      app: deployment-demo

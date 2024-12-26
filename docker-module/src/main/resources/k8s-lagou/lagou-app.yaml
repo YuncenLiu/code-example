@@ -1,0 +1,86 @@
+# registry.cn-beijing.aliyuncs.com/yuncenliu/lagou-app:1.4.0
+# registry.cn-beijing.aliyuncs.com/yuncenliu/lagou-mysql:5.7.44
+#   imagePullSecrets:
+#    - name: aliyun-yuncen
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiang-db
+spec:
+  replicas: 1  # 可根据需求设置副本数
+  selector:
+    matchLabels:
+      app: xiang-db
+  template:
+    metadata:
+      labels:
+        app: xiang-db
+    spec:
+      containers:
+        - name: db
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/lagou-mysql:5.7.44  # 更新后的 DB 镜像
+          ports:
+            - containerPort: 3306  # DB 服务的端口
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "123456"  # 请根据实际情况修改数据库密码
+      imagePullSecrets:
+        - name: aliyun-yuncen  # 使用 aliyun-yuncen 的 imagePullSecrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiang-db
+spec:
+  selector:
+    app: xiang-db  # 与 DB deployment 的标签匹配
+  ports:
+    - port: 3306  # DB 服务的端口
+      targetPort: 3306  # DB 服务的目标端口
+      nodePort: 30306
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xiang-app
+spec:
+  replicas: 1  # 可根据需求设置副本数
+  selector:
+    matchLabels:
+      app: xiang-app
+  template:
+    metadata:
+      labels:
+        app: xiang-app
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/busybox:1.32.0  # 使用轻量的 busybox 镜像
+          command: ['sh', '-c', 'until nc -z -v -w30 xiang-db 3306; do echo "Waiting for xiang-db..."; sleep 5; done;']
+          # 等待直到数据库服务可以访问
+      containers:
+        - name: app
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/lagou-app:1.4.0  # 更新后的 App 镜像
+          ports:
+            - containerPort: 8082  # App 服务的内部端口
+          env:
+            - name: DB_HOST
+              value: "xiang-db"  # 通过服务名连接 DB
+            - name: DB_PORT
+              value: "3306"  # DB 的端口
+      imagePullSecrets:
+        - name: aliyun-yuncen  # 使用 aliyun-yuncen 的 imagePullSecrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiang-service
+spec:
+  selector:
+    app: xiang-app  # 与 App deployment 的标签匹配
+  ports:
+    - port: 8082
+      targetPort: 8082  # 将流量转发到 App 容器的 8082 端口
+      nodePort: 30082
+  type: NodePort  # 暴露为 NodePort，使其对外可访问
