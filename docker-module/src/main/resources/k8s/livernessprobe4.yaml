@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-pod4-test
+  labels:
+    app: liveness-pod4-test
+spec:
+  containers:
+    - name: liveness-pod4-test
+      image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.17.10-alpine
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        tcpSocket:
+          port: 8080
+        # 初始化时间
+        initialDelaySeconds: 10
+        # 每次间隔扫描时间
+        periodSeconds: 3
+        # 超时时间
+        timeoutSeconds: 5
+  imagePullSecrets:
+    - name: aliyun-yuncen
+  restartPolicy: Always

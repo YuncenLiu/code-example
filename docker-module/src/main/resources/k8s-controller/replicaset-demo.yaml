@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: replicaset-demo
+  labels:
+    app: replicaset-demo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: replicaset-demo
+      labels:
+        app: replicaset-demo
+    spec:
+      containers:
+        - name: replicaset-demo
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.17.10-alpine
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: replicaset-demo
