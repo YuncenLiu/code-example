@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: liveness-pod2-test-deployment
+  labels:
+    app: liveness-pod2-test
+spec:
+  replicas: 3  # 可以根据需要调整副本数量
+  selector:
+    matchLabels:
+      app: liveness-pod2-test
+  template:
+    metadata:
+      labels:
+        app: liveness-pod2-test
+    spec:
+      containers:
+        - name: liveness-pod2-test
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.17.10-alpine
+          imagePullPolicy: IfNotPresent
+          # 检测 index 文件是否存在，如果不存在，按 restartPolicy 策略重启
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /index.html
+            initialDelaySeconds: 3
+            timeoutSeconds: 10
+      imagePullSecrets:
+        - name: aliyun-yuncen
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: liveness-pod2-test-service
+spec:
+  selector:
+    app: liveness-pod2-test
+  ports:
+    - protocol: TCP
+      port: 80        # Service 内部访问端口
+      targetPort: 80   # Pod 容器中的端口
+      nodePort: 30080  # 对外暴露的端口
+  type: NodePort  # 使用 NodePort 类型的服务对外暴露

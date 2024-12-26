@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-pod2-test
+  namespace: yun
+  labels:
+    app: liveness-pod2-test
+spec:
+  containers:
+    - name: liveness-pod2-test
+      image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.17.10-alpine
+      imagePullPolicy: IfNotPresent
+      # 检测 index 文件是否存在，如果不存在，按 restartPolicy 策略重启
+      livenessProbe:
+        httpGet:
+          port: 80
+          path: /index.html
+        initialDelaySeconds: 3
+        timeoutSeconds: 10
+  imagePullSecrets:
+    - name: aliyun-yuncen
+  restartPolicy: Always

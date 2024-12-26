@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-probe-pod1-test
+  labels:
+    app: liveness-probe-pod1-test
+spec:
+  containers:
+    - name: liveness-probe-pod1-test
+      image: registry.cn-beijing.aliyuncs.com/yuncenliu/busybox:1.32.0
+      imagePullPolicy: IfNotPresent
+      command: ['/bin/sh' , '-c', 'touch /tmp/liveness-pod; sleep 30; rm -rf /tmp/liveness-pod; sleep 3600']
+      livenessProbe:
+        exec:
+          command: ['test', '-e', '/tmp/liveness-pod']
+        initialDelaySeconds: 1
+        periodSeconds: 3
+  imagePullSecrets:
+    - name: aliyun-yuncen
+  restartPolicy: Always
