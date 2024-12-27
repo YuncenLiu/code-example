@@ -37,7 +37,8 @@ spec:
     - port: 3306      # 对集群内其他访问暴露端口
       targetPort: 3306
       nodePort: 30306   # 默认是 30000 - 32767 ，如果修改需要改 k8s 配置文件，官方不建议修改
-  clusterIP: 10.244.44.211  # 固定 IP 地址
+  type: NodePort
+  clusterIP: 10.100.6.100 # 固定 IP 地址
 
 ---
 apiVersion: apps/v1
@@ -58,21 +59,22 @@ spec:
     spec:
       initContainers:
         - name: wait-for-db
-          image: busybox
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/busybox:1.32.0
           command:
             - sh
             - -c
             - |
-              until nc -z -v -w30 10.244.44.211 3306; do
+              until nc -z -v -w30 10.100.6.100 3306; do
                 echo "Waiting for database connection..."
                 sleep 5
               done
               echo "Database is ready!"
       containers:
         - name: app
-          image: registry.cn-beijing.aliyuncs.com/yuncenliu/lagou-app:1.4.1
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/lagou-app:1.4.2
           ports:
             - containerPort: 8082
+          imagePullPolicy: IfNotPresent
       imagePullSecrets:
         - name: aliyun-yuncen  # 阿里云私有镜像仓库的凭证
 
@@ -88,3 +90,5 @@ spec:
     - port: 8082      # 对集群内其他访问暴露端口
       targetPort: 8082
       nodePort: 30082   # 默认是 30000 - 32767 ，如果修改需要改 k8s 配置文件，官方不建议修改
+  type: NodePort
+  clusterIP: 10.100.6.101

@@ -1,0 +1,16 @@
+# ingress 规则，是 K8s 自带的资源
+apiVersion: networking.k8s.io/v1  # 更新为正确的 API 版本
+kind: Ingress
+metadata:
+  name: nginx-ingress-test
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: tomcat-svc  # 目标服务的名称
+                port:
+                  number: 8080
+            pathType: Prefix  # 可以选择 Prefix 或 Exact
+            path: /

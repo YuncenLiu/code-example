@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-port-demo
+  labels:
+    app: node-port-demo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: node-port-demo
+      labels:
+        app: node-port-demo
+    spec:
+      containers:
+        - name: node-port-demo
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/tomcat:9.0.20-jre8-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: node-port-demo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-port-tomcat-svc
+spec:
+  selector:
+    app: node-port-tomcat-svc
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30088
+  type: NodePort
