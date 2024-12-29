@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-mariadb-nfs-pv
+  labels:
+    app: data-mariadb-nfs-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  mountOptions:
+    - hard
+    - nfsvers=4.1 # nfsstat -s 查看版本 一般是 Server nfs v4:
+  nfs:
+    path: /data/nfs/mariadb-nfs-data
+    server: 192.168.111.170
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-standard
+  volumeMode: Filesystem

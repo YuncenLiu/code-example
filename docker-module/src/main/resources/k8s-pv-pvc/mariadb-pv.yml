@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: yun-mariadb-pv
+  labels:
+    app: yun-mariadb-pv
+spec:
+  # 存储方式
+  accessModes:
+    - ReadWriteOnce # hostpath 模式只支持读写 1对1  ReadWriteOnce
+  capacity:
+    # 磁盘大小挂载 10G
+    storage: 10Gi
+  hostPath:
+    path: /root/container/mariadb-pv
+    # 如果目录不存在，我就创建一个这个目录
+    type: DirectoryOrCreate
+  # 回收策略
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  volumeMode: Filesystem
