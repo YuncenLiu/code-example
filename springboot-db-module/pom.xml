@@ -12,7 +12,7 @@
     <artifactId>springboot-db-module</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>gbase-8a-module</module>
+        <module>gbase-8a-conn-module</module>
     </modules>
 
     <properties>
