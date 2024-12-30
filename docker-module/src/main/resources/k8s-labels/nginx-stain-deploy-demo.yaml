@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-label-demo
+  labels:
+    app: nginx-label-demo
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: nginx-label-demo
+      labels:
+        # 对应 service.spec.selector.app
+        app: nginx-label-demo
+    spec:
+      tolerations:
+        - key: "offline"
+          value: "shutdown"
+          effect: "NoSchedule"
+          operator: Equal
+      imagePullSecrets:
+        - name: aliyun-yuncen
+      containers:
+        - name: nginx-label-demo
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.19.2-alpine
+          imagePullPolicy: IfNotPresent
+          # 对集群内，暴露 8080 端口
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: nginx-label-demo
+# 多种资源，用 --- 隔开
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-svc
+spec:
+  selector:
+    # 对应 deployment.spec.template.metadata.labels.app
+    app: nginx-label-demo
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+  type: NodePort
