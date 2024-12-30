@@ -40,6 +40,8 @@ spec:
   ports:
     - port: 443
       targetPort: 8443
+      nodePort: 30100
+  type: NodePort
   selector:
     k8s-app: kubernetes-dashboard
 
@@ -188,10 +190,12 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
+      imagePullSecrets:
+        - name: aliyun-yuncen
       containers:
         - name: kubernetes-dashboard
-          image: kubernetesui/dashboard:v2.7.0
-          imagePullPolicy: Always
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/dashboard:kubernetesui-v2.7.0
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8443
               protocol: TCP
@@ -273,9 +277,12 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
+      imagePullSecrets:
+        - name: aliyun-yuncen
       containers:
         - name: dashboard-metrics-scraper
-          image: kubernetesui/metrics-scraper:v1.0.8
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/metrics-scraper:kubernetesui-v1.0.8
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
               protocol: TCP

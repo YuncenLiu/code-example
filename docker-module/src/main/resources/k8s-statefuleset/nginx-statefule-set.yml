@@ -1,0 +1,56 @@
+# stateful-set
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx-deployment-stateful-set
+  labels:
+    app: nginx-deployment-stateful-set
+spec:
+  replicas: 3
+  serviceName: nginx-headless-service
+  template:
+    metadata:
+      name: nginx-deployment-stateful-set
+      labels:
+        app: nginx-deployment-stateful-set
+    spec:
+      containers:
+        - name: nginx-deployment-stateful-set
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.19.2-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: nginx-nfs-volume
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: nginx-nfs-volume
+        # 固定写法
+        annotations:
+          # 名字要和  nginx-statefule-set-storage.yml 中的 StorageClass.metadata.name 保持一致
+          volume.beta.kubernetes.io/storage-class: "nfs-storage-nginx"
+      spec:
+        # 定义存储方式
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  selector:
+    matchLabels:
+      app: nginx-deployment-stateful-set
+---
+# headless service 无头服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-headless-service
+spec:
+  selector:
+    # 与 stateful set 中的 .spec.template.metadata.name 保持一致
+    app: nginx-deployment-stateful-set
+  ports:
+    - port: 80
+  clusterIP: None
