@@ -11,11 +11,11 @@ import net.lingala.zip4j.exception.ZipException;
  * @description: TODO
  * @version: 1.0
  */
-public class DecrypZipFile {
+public class DecryptZipFile {
     public static void main(String[] args) {
-        String zipFilePath = "/Users/xiang/7/dev_s_meixin_sftp/chengbao/2024年08月22日.zip";
-        String destinationFolder = "/Users/xiang/7/dev_s_meixin_sftp/chengbao/";
-        String password = "1m[9Ba=Y0O<:";
+        String zipFilePath = "/Users/xiang/Desktop/de-sftp/2024年12月26日.zip";
+        String destinationFolder = "/Users/xiang/Desktop/de-sftp/";
+        String password = "=smEA#Os0jZ";
 
         try {
             // 创建 ZipFile 对象并解压文件
