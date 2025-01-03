@@ -1,0 +1,162 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiang-nacos-svc
+  namespace: xiang-cloud
+  labels:
+    app: xiang-nacos
+spec:
+  ports:
+    - port: 8848
+      name: client
+      targetPort: 8848
+      # 如果你需要使用到NodePort或LoadBalancer暴露应用，那么你可以将这里打开
+      # nodePort: 30848
+    - port: 9848
+      name: client-rpc
+      targetPort: 9848
+      # nodePort: 30948
+    - port: 9849
+      name: raft-rpc
+      targetPort: 9849
+      # nodePort: 30849
+    - port: 7848
+      name: old-raft-rpc
+      targetPort: 7848
+      # nodePort: 30748
+  # 如果你需要使用到NodePort或LoadBalancer暴露应用，那么你需要注释掉clusterIP
+  clusterIP: None
+  selector:
+    app: xiang-nacos
+  # ClusterIP, NodePort, LoadBalancer
+  type: ClusterIP
+  # 如果你需要使用到NodePort或LoadBalancer暴露应用，那么你需要将这里改为ClientIP
+  # ClientIP, None
+  sessionAffinity: None
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: xiang-nacos
+  namespace: xiang-cloud
+spec:
+  selector:
+    matchLabels:
+      app: xiang-nacos
+  serviceName: "xiang-nacos-svc"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: xiang-nacos
+    spec:
+      terminationGracePeriodSeconds: 10
+      imagePullSecrets:
+        - name: aliyun-yuncen
+      containers:
+        - name: nacos
+          # 这里一个是官方镜像，一个是我拉取的官方镜像然后推送到国内阿里云的镜像
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/nacos:v2.4.3
+          imagePullPolicy: IfNotPresent
+          # 存活探针
+          livenessProbe:
+            # 通过发送http的get请求确认nacos是否存活
+            httpGet:
+              # 请求8848端口的/nacos/actuator/health路径，如果返回为200则证明存活
+              path: /nacos/actuator/health
+              port: 8848
+              scheme: HTTP
+            # pod初始化完成后多久开始进行存活探针的检查，这里设置为30秒
+            initialDelaySeconds: 30
+            # 之后每十秒检查一次是否存活
+            periodSeconds: 10
+          ports:
+            - containerPort: 8848
+              name: client
+            - containerPort: 9848
+              name: client-rpc
+            - containerPort: 9849
+              name: raft-rpc
+            - containerPort: 7848
+              name: old-raft-rpc
+          volumeMounts:
+            # 挂载数据目录
+            - name: nacos-data
+              mountPath: /home/nacos/data
+            # 挂载日志目录
+            - name: nacos-logs
+              mountPath: /home/nacos/logs
+          env:
+            # 引用ConfigMap里面的各个属性
+            - name: JVM_XMN
+              valueFrom:
+                configMapKeyRef:
+                  key: jvm-xmn
+                  name: xiang-nacos-cm
+            - name: JVM_XMS
+              valueFrom:
+                configMapKeyRef:
+                  key: jvm-xms
+                  name: xiang-nacos-cm
+            - name: JVM_XMX
+              valueFrom:
+                configMapKeyRef:
+                  key: jvm-xmx
+                  name: xiang-nacos-cm
+            - name: MODE
+              valueFrom:
+                configMapKeyRef:
+                  key: mode
+                  name: xiang-nacos-cm
+            - name: MYSQL_DATABASE_NUM
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql-database-num
+                  name: xiang-nacos-cm
+            - name: MYSQL_SERVICE_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql-service-db-name
+                  name: xiang-nacos-cm
+            - name: MYSQL_SERVICE_DB_PARAM
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql-service-db-param
+                  name: xiang-nacos-cm
+            - name: MYSQL_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql-service-host
+                  name: xiang-nacos-cm
+            # 数据库的密码引用之前为MySQL创建的Secret
+            - name: MYSQL_SERVICE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-root-password
+                  name: xiang-mysql-password-secret
+            - name: MYSQL_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql-service-port
+                  name: xiang-nacos-cm
+            - name: MYSQL_SERVICE_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql-service-user
+                  name: xiang-nacos-cm
+            - name: SPRING_DATASOURCE_PLATFORM
+              valueFrom:
+                configMapKeyRef:
+                  key: spring-datasource-platform
+                  name: xiang-nacos-cm
+      volumes:
+        # 使用刚刚创建的数据目录的pvc
+        - name: nacos-data
+          persistentVolumeClaim:
+            claimName: xiang-nacos-data-pvc
+        # 使用刚刚创建的日志目录的pvc
+        - name: nacos-logs
+          persistentVolumeClaim:
+            claimName: xiang-nacos-logs-pvc
