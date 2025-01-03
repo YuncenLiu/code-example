@@ -16,8 +16,7 @@ spec:
         app: nginx-deploy
     spec:
       containers:
-        - image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.19.3-alpine
-          imagePullPolicy: IfNotPresent
+        - image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.27.3
           name: nginx
           ports:
             - containerPort: 80
