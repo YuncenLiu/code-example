@@ -5,12 +5,13 @@ metadata:
 spec:
   capacity:
     # 申请的容量，生产环境注意修改
-    storage: 1Gi
+    storage: 5Gi
   accessModes:
     - ReadWriteMany
   nfs:
     # nfs服务器地址和目录，注意修改为自己的
-    server: 192.168.58.170
+    #　server: 192.168.58.170
+    server: 192.168.111.170
     path: /data/xiang-cloud/mysql
   # 存储类类型，我们使用nfs
   storageClassName: "nfs"
@@ -30,5 +31,5 @@ spec:
   resources:
     requests:
       # 申请的容量，生产环境注意修改
-      storage: 5Gi
+      storage: 1Gi
   volumeName: xiang-mysql-pv

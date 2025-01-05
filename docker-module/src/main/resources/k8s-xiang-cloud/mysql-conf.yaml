@@ -11,43 +11,16 @@ metadata:
 
 apiVersion: v1
 data:
-  my.cnf: |
-    # For advice on how to change settings please see
-    # http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html
-
-    [mysqld]
-    #
-    # Remove leading # and set to the amount of RAM for the most important data
-    # cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
-    # innodb_buffer_pool_size = 128M
-    #
-    # Remove leading # to turn on a very important data integrity option: logging
-    # changes to the binary log between backups.
-    # log_bin
-    #
-    # Remove leading # to set options mainly useful for reporting servers.
-    # The server defaults are faster for transactions and fast SELECTs.
-    # Adjust sizes as needed, experiment to find the optimal values.
-    # join_buffer_size = 128M
-    # sort_buffer_size = 2M
-    # read_rnd_buffer_size = 2M
-    skip-host-cache
-    skip-name-resolve
-    datadir=/var/lib/mysql
-    socket=/var/run/mysqld/mysqld.sock
-    secure-file-priv=/var/lib/mysql-files
-    user=mysql
-
-    # Disabling symbolic-links is recommended to prevent assorted security risks
-    symbolic-links=0
-
-    #log-error=/var/log/mysqld.log
-    pid-file=/var/run/mysqld/mysqld.pid
-    [client]
-    socket=/var/run/mysqld/mysqld.sock
-
-    !includedir /etc/mysql/conf.d/
-    !includedir /etc/mysql/mysql.conf.d/
+  my.cnf: "# For advice on how to change settings please see\r\n# http://dev.mysql.com/doc/refman/8.4/en/server-configuration-defaults.html\r\n\r\n[mysqld]\r\n#\r\n#
+    Remove leading # and set to the amount of RAM for the most important data\r\n#
+    cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.\r\n#
+    innodb_buffer_pool_size = 128M\r\n#\r\n# Remove leading # to turn on a very important
+    data integrity option: logging\r\n# changes to the binary log between backups.\r\n#
+    log_bin\r\n#\r\n# Remove leading # to set options mainly useful for reporting
+    servers.\r\n# The server defaults are faster for transactions and fast SELECTs.\r\n#
+    Adjust sizes as needed, experiment to find the optimal values.\r\n# join_buffer_size
+    = 128M\r\n# sort_buffer_size = 2M\r\n# read_rnd_buffer_size = 2M\r\n\r\nhost-cache-size=0\r\nskip-name-resolve\r\ndatadir=/var/lib/mysql\r\nsocket=/var/run/mysqld/mysqld.sock\r\nsecure-file-priv=/var/lib/mysql-files\r\nuser=mysql\r\n\r\npid-file=/var/run/mysqld/mysqld.pid\r\n[client]\r\nsocket=/var/run/mysqld/mysqld.sock\r\n\r\n!includedir
+    /etc/mysql/conf.d/\r\n"
 kind: ConfigMap
 metadata:
   creationTimestamp: null
