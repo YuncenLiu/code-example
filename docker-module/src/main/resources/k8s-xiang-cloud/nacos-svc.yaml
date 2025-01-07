@@ -32,7 +32,7 @@ spec:
   type: ClusterIP
   # 如果你需要使用到NodePort或LoadBalancer暴露应用，那么你需要将这里改为ClientIP
   # ClientIP, None
-  sessionAffinity: None
+  sessionAffinity: ClientIP
 
 ---
 
@@ -49,6 +49,7 @@ spec:
   replicas: 1
   template:
     metadata:
+      name: xiang-nacos
       labels:
         app: xiang-nacos
     spec:
