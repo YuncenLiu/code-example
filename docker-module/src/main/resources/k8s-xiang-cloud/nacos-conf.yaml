@@ -5,12 +5,12 @@ data:
   jvm-xmx: "128m"
   mode: "standalone"
   mysql-database-num: "1"
-  mysql-service-db-name: "xiang_config"
-  mysql-service-db-param: "characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&serverTimezone=UTC"
+  mysql-service-db-name: "xiang_nacos_config"
+  mysql-service-db-param: "characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
   mysql-service-host: "xiang-mysql-0.xiang-mysql-svc.xiang-cloud.svc.cluster.local"
   mysql-service-port: "3306"
   mysql-service-user: "root"
-  spring-datasource-platform: "mysql"
+  spring-datasource-platform: mysql
 kind: ConfigMap
 metadata:
   creationTimestamp: null

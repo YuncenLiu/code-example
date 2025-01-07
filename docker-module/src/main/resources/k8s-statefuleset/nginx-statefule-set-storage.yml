@@ -33,12 +33,12 @@ spec:
         - name: NFS_SERVER
           value: 192.168.58.170 #NFS服务器地址，与volumes.nfs.servers保持一致
         - name: NFS_PATH
-          value: /data/nginx #NFS服务共享目录地址，与volumes.nfs.path保持一致
+          value: /data/stateful-nginx #NFS服务共享目录地址，与volumes.nfs.path保持一致
       volumes:
       - name: nfs-client-root
         nfs:
           server: 192.168.58.170 #NFS服务器地址，与spec.containers.env.value保持一致
-          path: /data/nginx #NFS服务器目录，与spec.containers.env.value保持一致
+          path: /data/stateful-nginx #NFS服务器目录，与spec.containers.env.value保持一致
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

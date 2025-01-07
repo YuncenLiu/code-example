@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-dep
+  name: nginx-dep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-dep
+  template:
+    metadata:
+      labels:
+        app: nginx-dep
+    spec:
+      containers:
+        - image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.19.3-alpine
+          name: nginx
+          ports:
+            - containerPort: 80
