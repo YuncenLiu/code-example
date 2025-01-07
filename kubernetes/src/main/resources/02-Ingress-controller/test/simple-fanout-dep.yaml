@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: simple-fanout-dep
+  name: simple-fanout-dep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simple-fanout-dep
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: simple-fanout-dep
+    spec:
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.27.3
+        name: nginx
+        resources: {}
+status: {}
