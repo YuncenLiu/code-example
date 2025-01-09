@@ -1,0 +1,9 @@
+# kubectl config set-context --current --namespace=xiang-cloud
+# 设置上下文的命令空间
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: xiang-cloud
+spec: {}
+status: {}

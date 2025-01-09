@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiang-mysql-svc
+  namespace: xiang-cloud
+  labels:
+    app: xiang-mysql
+spec:
+  ports:
+    - port: 3306
+      name: mysql
+      targetPort: 3306
+      # 如果需要NodePort暴露则将这里打开
+      # nodePort: 30306
+  # 如果需要NodePort暴露则将这里注释
+  clusterIP: None
+  selector:
+    app: xiang-mysql
+  # 如果需要NodePort暴露则将这里改为NodePort
+  # ClusterIP, NodePort, LoadBalancer
+  type: ClusterIP
+  # 如果需要NodePort暴露则将这里改为ClientIP
+  # ClientIP, None
+  sessionAffinity: None
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: xiang-mysql
+  namespace: xiang-cloud
+spec:
+  selector:
+    matchLabels:
+      app: xiang-mysql
+  serviceName: "xiang-mysql-svc"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: xiang-mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        # 一些部署MySQL的参数
+        - args:
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_general_ci
+            - --lower_case_table_names=1
+            - --default-time_zone=+8:00
+          name: mysql
+          # 注意修改为你自己的镜像地址
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/mysql:xiang-cloud-8.4.3
+          imagePullPolicy: IfNotPresent
+          # 存活探针，用于检查pod是否处于存活状态
+          livenessProbe:
+            # 初始化后20秒开始检查
+            initialDelaySeconds: 20
+            # 之后每过10秒检查一次
+            periodSeconds: 10
+            # 检查内容为3306端口是否存活
+            tcpSocket:
+              port: 3306
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+            - name: mysql-conf
+              mountPath: /etc/my.cnf
+              readOnly: true
+              subPath: my.cnf
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-root-password
+                  name: xiang-mysql-password-secret
+      imagePullSecrets:
+        - name: aliyun-yuncen
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: xiang-mysql-pvc
+        - name: mysql-conf
+          configMap:
+            name: xiang-mysql-config-cm
+            items:
+              - key: my.cnf
+                mode: 0644
+                path: my.cnf
