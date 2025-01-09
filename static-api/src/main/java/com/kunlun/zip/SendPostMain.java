@@ -31,7 +31,7 @@ public class SendPostMain {
         jsonObject.put("timestamp",nowTime);
 
         JSONObject reqMsgJson = new JSONObject();
-        reqMsgJson.put("timestamp","2024-01-23 10:25:52");
+        reqMsgJson.put("timestamp","2024-01-01 10:25:52");
         reqMsgJson.put("orgCode","dev_s_meixin_sftp");
         reqMsgJson.put("dataTypeCode","SP");
         jsonObject.put("reqMsg",reqMsgJson);

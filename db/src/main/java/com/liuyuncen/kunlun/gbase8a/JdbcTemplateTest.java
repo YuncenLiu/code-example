@@ -82,18 +82,18 @@ public class JdbcTemplateTest {
         System.out.println("Gbase 写入 500条数据 执行时间：" + (endGbaseTime -startGbaseTime) + "ms");
 
         long startMysqlTime = System.currentTimeMillis();
-        mysqlJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                IndexTest indexTest = testDataList.get(i);
-                ps.setString(1, indexTest.getName());
-                ps.setDate(2, new java.sql.Date(indexTest.getDt().getTime()));
-            }
-            @Override
-            public int getBatchSize() {
-                return batchSize;
-            }
-        });
+//        mysqlJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+//            @Override
+//            public void setValues(PreparedStatement ps, int i) throws SQLException {
+//                IndexTest indexTest = testDataList.get(i);
+//                ps.setString(1, indexTest.getName());
+//                ps.setDate(2, new java.sql.Date(indexTest.getDt().getTime()));
+//            }
+//            @Override
+//            public int getBatchSize() {
+//                return batchSize;
+//            }
+//        });
         long endMysqlTime = System.currentTimeMillis();
         System.out.println("MySQL 写入 500条数据 执行时间：" + (endMysqlTime -startMysqlTime) + "ms");
     }

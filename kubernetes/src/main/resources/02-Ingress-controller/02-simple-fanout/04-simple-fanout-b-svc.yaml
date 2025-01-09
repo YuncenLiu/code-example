@@ -3,8 +3,8 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: simple-fanout-dep
-  name: simple-fanout-dep
+    app: simple-fanout-b-dep
+  name: simple-fanout-b-dep
 spec:
   ports:
   - name: 80-80
@@ -12,7 +12,7 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: simple-fanout-dep
+    app: simple-fanout-b-dep
   type: ClusterIP
 status:
   loadBalancer: {}

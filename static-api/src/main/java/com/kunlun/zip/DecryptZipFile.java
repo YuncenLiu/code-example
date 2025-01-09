@@ -13,9 +13,9 @@ import net.lingala.zip4j.exception.ZipException;
  */
 public class DecryptZipFile {
     public static void main(String[] args) {
-        String zipFilePath = "/Users/xiang/Desktop/de-sftp/2024年12月26日.zip";
+        String zipFilePath = "/Users/xiang/7/dev_s_meixin_sftp/chengbao/2025年01月08日.zip";
         String destinationFolder = "/Users/xiang/Desktop/de-sftp/";
-        String password = "=smEA#Os0jZ";
+        String password = "Abcd!2345";
 
         try {
             // 创建 ZipFile 对象并解压文件

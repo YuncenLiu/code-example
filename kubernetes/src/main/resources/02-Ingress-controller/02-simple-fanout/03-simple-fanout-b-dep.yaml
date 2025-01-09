@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: simple-fanout-dep
-  name: simple-fanout-dep
+    app: simple-fanout-b-dep
+  name: simple-fanout-b-dep
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: simple-fanout-dep
+      app: simple-fanout-b-dep
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: simple-fanout-dep
+        app: simple-fanout-b-dep
     spec:
       containers:
-      - image: registry.cn-beijing.aliyuncs.com/yuncenliu/nginx:1.27.3
-        name: nginx
+      - image: ikubernetes/demoapp:v1.0
+        name: demoapp
         resources: {}
 status: {}
