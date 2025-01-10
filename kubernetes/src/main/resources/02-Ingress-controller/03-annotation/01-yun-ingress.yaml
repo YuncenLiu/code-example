@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  creationTimestamp: null
+  name: yun
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: yun.yuncen-k8s.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: simple-fanout-a-dep
+            port:
+              number: 80
+        path: /a
+        pathType: Exact
+      - backend:
+          service:
+            name: simple-fanout-b-dep
+            port:
+              number: 80
+        path: /b
+        pathType: Exact
+status:
+  loadBalancer: {}
