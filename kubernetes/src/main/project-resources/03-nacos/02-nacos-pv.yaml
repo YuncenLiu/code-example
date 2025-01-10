@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xiang-nacos-logs-pv
+spec:
+  capacity:
+    # 申请的容量，生产环境注意修改
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    # nfs服务器地址和目录，注意修改为自己的
+    server: 192.168.126.4
+    path: /data/xiang-cloud/nacos/logs
+  # 存储类类型，我们使用nfs
+  storageClassName: "nfs"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xiang-nacos-logs-pvc
+  namespace: xiang-cloud
+spec:
+  accessModes:
+    - ReadWriteMany
+  # 存储类类型，我们使用nfs
+  storageClassName: "nfs"
+  resources:
+    requests:
+      # 申请的容量，生产环境注意修改
+      storage: 1Gi
+  volumeName: xiang-nacos-logs-pv
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xiang-nacos-data-pv
+spec:
+  capacity:
+    # 申请的容量，生产环境注意修改
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    # nfs服务器地址和目录，注意修改为自己的
+    server: 192.168.126.4
+    path: /data/xiang-cloud/nacos/data
+  # 存储类类型，我们使用nfs
+  storageClassName: "nfs"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xiang-nacos-data-pvc
+  namespace: xiang-cloud
+spec:
+  accessModes:
+    - ReadWriteMany
+  # 存储类类型，我们使用nfs
+  storageClassName: "nfs"
+  resources:
+    requests:
+      # 申请的容量，生产环境注意修改
+      storage: 1Gi
+  volumeName: xiang-nacos-data-pv
