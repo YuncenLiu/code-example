@@ -1,12 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
   creationTimestamp: null
-  name: my-ingress
+  name: xiang-ssl
+  namespace: default
 spec:
   ingressClassName: nginx
   rules:
-  - host: yun-a.yuncen-k8s.com
+  - host: ssl.yuncen-k8s.com
     http:
       paths:
       - backend:
@@ -14,17 +17,18 @@ spec:
             name: simple-fanout-a-dep
             port:
               number: 80
-        path: /
-        pathType: Prefix
-  - host: yun-b.yuncen-k8s.com
-    http:
-      paths:
+        path: /a
+        pathType: Exact
       - backend:
           service:
             name: simple-fanout-b-dep
             port:
               number: 80
-        path: /
-        pathType: Prefix
+        path: /b
+        pathType: Exact
+  tls:
+  - hosts:
+    - ssl.yuncen-k8s.com
+    secretName: xiang-tls
 status:
   loadBalancer: {}

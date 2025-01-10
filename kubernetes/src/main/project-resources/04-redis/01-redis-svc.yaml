@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xiang-redis-svc
+  namespace: xiang-cloud
+  labels:
+    app: xiang-redis
+spec:
+  ports:
+    - port: 6379
+      name: redis
+      targetPort: 6379
+      # 如果需要NodePort暴露则将这里打开
+      # nodePort: 30379
+    # 如果需要NodePort暴露则将这里注释
+  clusterIP: None
+  selector:
+    app: xiang-redis
+  # 如果需要NodePort暴露则将这里改为NodePort
+  # ClusterIP, NodePort, LoadBalancer
+  type: ClusterIP
+  # 如果需要NodePort暴露则将这里改为ClientIP
+  # ClientIP, None
+  sessionAffinity: None
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: xiang-redis
+  namespace: xiang-cloud
+spec:
+  selector:
+    matchLabels:
+      app: xiang-redis
+  serviceName: "xiang-redis-svc"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: xiang-redis
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        # 启动命令，使用指定配置文件启动
+        - command:
+            - "redis-server"
+            - "/usr/local/etc/redis.conf"
+          name: redis
+          # 这里一个是官方镜像，一个是我拉取的官方镜像然后推送到国内阿里云的镜像
+          # image: docker.io/library/redis:5.0.14
+          image: registry.cn-beijing.aliyuncs.com/yuncenliu/redis:5.0.14
+          # 存活探针
+          livenessProbe:
+            # pod初始化完成后20秒开始检测
+            initialDelaySeconds: 20
+            # 之后每隔10秒检查一次
+            periodSeconds: 10
+            # 检查的流程是用tcp协议去查看6379端口是否存活
+            tcpSocket:
+              port: 6379
+          ports:
+            - containerPort: 6379
+              name: redis
+          volumeMounts:
+            # 挂载数据目录
+            - name: redis-data
+              mountPath: /data
+            # 挂载配置文件
+            - name: redis-config
+              mountPath: /usr/local/etc
+              readOnly: true
+      volumes:
+        # 挂载数据目录，使用之前创建的pvc
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: xiang-redis-pvc
+        # 挂载配置文件，引用之前创建的ConfigMap
+        - name: redis-config
+          configMap:
+            name: xiang-redis-config-cm
+            items:
+              - key: redis.conf
+                path: redis.conf
