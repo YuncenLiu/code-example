@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  redis.conf: "# 关闭保护模式\nprotected-mode no\n  \n# redis链接密码，如果需要密码，那么请取消注释\n# requirepass
+    redis\n  \n# 日志级别\nloglevel warning\n# 日志存放目录\nlogfile \"/data/redis.log\"\n#
+    数据文件目录\ndir /data\ndbfilename dump.rdb\n  \n# 数据库数量\ndatabases 16\n  \n# 保存数据库到数据文件\nsave
+    900 1\nsave 300 10\nsave 60 10000\n\n# kubectl create configmap xiang-redis-config-cm
+    --namespace=xiang-cloud --from-file=redis.conf --dry-run=client --output=yaml
+    > 03-redis-config.yaml\n"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: xiang-redis-config-cm
+  namespace: xiang-cloud

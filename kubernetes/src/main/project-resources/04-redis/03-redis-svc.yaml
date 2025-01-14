@@ -49,7 +49,6 @@ spec:
             - "/usr/local/etc/redis.conf"
           name: redis
           # 这里一个是官方镜像，一个是我拉取的官方镜像然后推送到国内阿里云的镜像
-          # image: docker.io/library/redis:5.0.14
           image: registry.cn-beijing.aliyuncs.com/yuncenliu/redis:5.0.14
           # 存活探针
           livenessProbe:

@@ -1,17 +1,17 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: xiang-mysql-pv
+  name: xiang-redis-pv
 spec:
   capacity:
     # 申请的容量，生产环境注意修改
-    storage: 5Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteMany
   nfs:
     # nfs服务器地址和目录，注意修改为自己的
     server: 192.168.58.4
-    path: /data/xiang-cloud/mysql
+    path: /data/xiang-cloud/redis
   # 存储类类型，我们使用nfs
   storageClassName: "nfs"
 
@@ -20,15 +20,15 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: xiang-mysql-pvc
+  name: xiang-redis-pvc
   namespace: xiang-cloud
 spec:
   accessModes:
     - ReadWriteMany
-  # 存储类类型，我们使用nfs
   storageClassName: "nfs"
   resources:
     requests:
       # 申请的容量，生产环境注意修改
       storage: 1Gi
-  volumeName: xiang-mysql-pv
+  # 存储类类型，我们使用nfs
+  volumeName: xiang-redis-pv

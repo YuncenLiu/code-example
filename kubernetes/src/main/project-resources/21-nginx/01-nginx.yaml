@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: xiang-nginx-deployment
+  name: xiang-nginx-deployment
+  namespace: xiang-cloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xiang-nginx-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: xiang-nginx-deployment
+    spec:
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/yuncenliu/xiang-cloud-service:nginx-1.0
+        name: xiang-cloud-service
+        livenessProbe:
+          httpGet:
+            port: 80
+            path: /
+            scheme: HTTP
+          # pod初始化完毕20秒后再进行存活检查
+          initialDelaySeconds: 60
+          # 之后每隔10秒检查一次
+          periodSeconds: 10
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xiang-nginx-deployment
+  name: xiang-nginx-svc
+  namespace: xiang-cloud
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: xiang-nginx-deployment
+  type: ClusterIP
