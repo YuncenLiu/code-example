@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时日志查看器</title>
+</head>
+<div id="log-container" style="font-family: monospace; white-space: pre;"></div>
+<script>
+    const logContainer = document.getElementById('log-container');
+    const logFileName = 'application.log'; // 要监听的日志文件名
+
+    const eventSource = new EventSource(`/logs/tail/${logFileName}`);
+
+    eventSource.onmessage = (event) => {
+        console.log(event.data);
+        logContainer.innerHTML += event.data + '\n';
+        logContainer.scrollTop = logContainer.scrollHeight;
+    };
+
+    eventSource.onerror = (err) => {
+        console.error('SSE error:', err);
+        eventSource.close();
+    };
+</script>
+</body>
+</html>

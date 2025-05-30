@@ -24,7 +24,7 @@ public class CompletableFutureAPI2Demo {
             return 1;
         }, threadPool).handle((v, e) -> {
             System.out.println("----- 222");
-//            int i = 10 / 0;
+            // int i = 10 / 0;
             return v + 2;
         }).handle((v, e) -> {
             System.out.println("----- 333");

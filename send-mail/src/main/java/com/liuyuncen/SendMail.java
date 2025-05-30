@@ -36,8 +36,8 @@ public class SendMail {
 
     public static void sendEmail(String to, String subject, String body) {
         // 设置发件人邮箱地址和密码
-        final String username = "data@kunlunhealth.com";
-        final String password = "DfrscvC67g6fRSe9";
+        final String username = "data_alarm@kunlunhealth.com";
+        final String password = "kkwe2ZngQCA2VC4j";
 
 //        final String username = "array_xiangxiang@163.com";
 //        final String password = "MEODMDFOOKFAMPQP";

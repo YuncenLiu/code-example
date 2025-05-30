@@ -60,8 +60,15 @@ public class AESExample {
     public static void main(String[] args) {
         try {
             // 给定的 AES 密钥和偏移量（IV）
+
+
+
+
             String key = "meixin1234567899"; // 16 字节 AES 密钥
             String iv = "1234567812345678"; // 16 字节 IV
+
+            key = "meixin@202501029"; // 16 字节 AES 密钥
+            iv = "1234567812345678"; // 16 字节 IV
             // Encrypted: PHGJ+kL0/9X7KTvA2WPaduTsKwc48FQDCnY3AFtEF29TNBgSmnSaQiB3qvESM6tXuuPfR6w4L1B5HEw6ZlRgVY+VRhf6c3Jytvo9gt/oWtug3THDiYGrTzTG90yN+Gbbr5gd++xhIvF8TIBva1GI5dCJ491vpbvNePz2XPPeyiA=
             // Encrypted: svdobKvZ89JHBEheqpjcFm80qCw8i3VdA17OZOvxKGiedel4WTMiHt4C3WDjEKS1uDVTXFcBck8lOrw2zOdb39Rx6yllJWBHlWFhmuHjV5hSuN/Du09oFw0j7SmJaZLirw4Zo21sdiCVjqa4VCQ67DK3DJJodNDi27wKY8SGsRo=
             // 要加密的明文数据
@@ -85,15 +92,17 @@ public class AESExample {
 //            JSONObject jsonObject = JSON.parseObject(message);
 //            String reqMsg = jsonObject.getString("reqMsg");
 
-            String plainText = "KL,HelloWorld";
+//            String plainText = "KL,HelloWorld";
+
+            String plainText = "z0GCfdbrlPeR8HpQzwDA1cytu9+fwAa93fxOLqgvaPUEbLQRbMoDe/BPS1R9GLQBbHsUBJF8LCvsVbqKbdvmjS60+tCZb8AMkJa8hSvdJ0g=";
 
             // 加密
-            String encryptedText = encrypt(plainText, key, iv);
+            String encryptedText = decrypt(plainText, key, iv);
             System.out.println("Encrypted: " + encryptedText);
 
             // 解密
-            String decryptedText = decrypt(encryptedText, key, iv);
-            System.out.println("Decrypted: " + decryptedText);
+//            String decryptedText = decrypt(encryptedText, key, iv);
+//            System.out.println("Decrypted: " + decryptedText);
 
         } catch (Exception e) {
             e.printStackTrace();

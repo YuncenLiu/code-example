@@ -22,10 +22,11 @@ import java.io.File;
 public class ZipAndEncryptFiles {
     public static void main(String[] args) {
         String[] filesToCompress = {
-            "/Users/xiang/Desktop/sftp/2024年12月26日.txt"
+            "/Users/xiang/Desktop/csv/字典表-1738982482543.csv",
+                "/Users/xiang/Desktop/csv/字典表-1738982694569.csv"
         };
         // 输出压缩文件的路径
-        String zipFilePath = "/Users/xiang/Desktop/de-sftp/2024年12月26日.zip";
+        String zipFilePath = "/Users/xiang/Desktop/csv/zip.zip";
         // 设置压缩包的密码
         String password = "=smEA#Os0jZ";
 

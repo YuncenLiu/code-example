@@ -61,8 +61,8 @@ public class JdbcTemplateTest {
     public static void testGbaseToMysql(){
         final int batchSize = 500;
         List<IndexTest> testDataList = generateTestData(500);
-        JdbcTemplate gbaseJdbcTemplate = new JdbcTemplate(getOrgGBaeDataSource());
-        JdbcTemplate mysqlJdbcTemplate = new JdbcTemplate(getMySQLDataSource());
+        JdbcTemplate gbaseJdbcTemplate = new JdbcTemplate(getMySQLDataSource());
+//        JdbcTemplate mysqlJdbcTemplate = new JdbcTemplate(getMySQLDataSource());
         String sql = "INSERT INTO index_test (name, dt) VALUES (?, ?)";
 
         long startGbaseTime = System.currentTimeMillis();
@@ -70,8 +70,8 @@ public class JdbcTemplateTest {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 IndexTest indexTest = testDataList.get(i);
-                ps.setString(1, indexTest.getName());
-                ps.setDate(2, new java.sql.Date(indexTest.getDt().getTime()));
+                ps.setObject(1, indexTest.getName());
+                ps.setObject(2, new java.sql.Date(indexTest.getDt().getTime()));
             }
             @Override
             public int getBatchSize() {

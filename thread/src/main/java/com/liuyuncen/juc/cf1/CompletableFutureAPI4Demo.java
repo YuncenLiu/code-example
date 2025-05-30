@@ -17,13 +17,8 @@ public class CompletableFutureAPI4Demo {
 
         // 各玩各的，没有任何关系
         System.out.println(CompletableFuture.supplyAsync(() -> "resultA").thenRun(() -> {System.out.println("没有任何关系");}).join());
-
         System.out.println(CompletableFuture.supplyAsync(() -> "resultA").thenAccept(r -> System.out.println(r)).join());
-
         System.out.println(CompletableFuture.supplyAsync(() -> "resultA").thenApply(r -> r + "===").join());
-
-
-
 
         System.out.println(CompletableFuture.supplyAsync(() -> "resultA").thenRun(() -> {
             System.out.println("没有任何关系");

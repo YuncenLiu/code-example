@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时日志查看器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #a0c0e0;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .control-panel {
+            background: rgba(30, 30, 40, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .panel-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #4fc3f7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #bbbbbb;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: rgba(20, 20, 30, 0.7);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4fc3f7;
+            box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-start {
+            background: linear-gradient(to right, #00c853, #009624);
+            color: white;
+        }
+
+        .btn-stop {
+            background: linear-gradient(to right, #ff5252, #b33939);
+            color: white;
+        }
+
+        .btn-clear {
+            background: linear-gradient(to right, #ff9800, #e65100);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .log-container {
+            background: rgba(15, 15, 25, 0.85);
+            border-radius: 15px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .log-header {
+            padding: 15px 20px;
+            background: rgba(30, 30, 40, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .log-title {
+            font-size: 1.2rem;
+            color: #4fc3f7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .log-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .log-controls button {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .log-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            background: rgba(10, 10, 15, 0.95);
+        }
+
+        .log-line {
+            margin-bottom: 5px;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+
+        .log-line.info {
+            color: #e0e0e0;
+        }
+
+        .log-line.debug {
+            color: #64b5f6;
+        }
+
+        .log-line.warn {
+            color: #ffd54f;
+        }
+
+        .log-line.error {
+            color: #ff8a80;
+        }
+
+        .status-bar {
+            padding: 12px 20px;
+            background: rgba(30, 30, 40, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff5252;
+        }
+
+        .indicator.connected {
+            background: #00c853;
+            box-shadow: 0 0 10px #00c853;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            gap: 5px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: rgba(30, 30, 40, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #4fc3f7;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .feature-desc {
+            color: #bbbbbb;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .log-container {
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .log-controls {
+                flex-wrap: wrap;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1><i class="fas fa-file-alt"></i> 实时日志查看器</h1>
+        <p class="subtitle">本工具提供实时日志监控功能，支持中文UTF-8格式显示，可动态跟踪日志文件变化，类似XXL-JOB的日志展示效果</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="control-panel">
+            <h2 class="panel-title"><i class="fas fa-cogs"></i> 控制面板</h2>
+
+            <div class="form-group">
+                <label for="logFile"><i class="fas fa-file"></i> 日志文件</label>
+                <select id="logFile">
+                    <option value="application.log">application.log (应用日志)</option>
+                    <option value="system.log">system.log (系统日志)</option>
+                    <option value="error.log">error.log (错误日志)</option>
+                    <option value="access.log">access.log (访问日志)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="logLevel"><i class="fas fa-filter"></i> 日志级别过滤</label>
+                <select id="logLevel">
+                    <option value="all">显示所有级别</option>
+                    <option value="info">仅显示 INFO 及以上</option>
+                    <option value="warn">仅显示 WARN 及以上</option>
+                    <option value="error">仅显示 ERROR</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="refreshRate"><i class="fas fa-sync-alt"></i> 刷新频率 (毫秒)</label>
+                <input type="number" id="refreshRate" value="500" min="100" max="5000">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-check-circle"></i> 显示选项</label>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" id="autoScroll" checked style="width: auto; margin-right: 10px;">
+                        自动滚动到最新内容
+                    </label>
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" id="showTimestamp" checked style="width: auto; margin-right: 10px;">
+                        显示时间戳
+                    </label>
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" id="colorize" checked style="width: auto; margin-right: 10px;">
+                        启用颜色高亮
+                    </label>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-start" id="startBtn">
+                    <i class="fas fa-play"></i> 开始监控
+                </button>
+                <button class="btn-stop" id="stopBtn" disabled>
+                    <i class="fas fa-stop"></i> 停止监控
+                </button>
+                <button class="btn-clear" id="clearBtn">
+                    <i class="fas fa-broom"></i> 清空日志
+                </button>
+            </div>
+        </div>
+
+        <div class="log-container">
+            <div class="log-header">
+                <div class="log-title">
+                    <i class="fas fa-file-code"></i>
+                    <span id="currentLogFile">application.log</span>
+                </div>
+                <div class="log-controls">
+                    <button class="btn-clear" style="padding: 8px 12px;" id="searchBtn">
+                        <i class="fas fa-search"></i> 搜索
+                    </button>
+                    <button class="btn-start" style="padding: 8px 12px;" id="exportBtn">
+                        <i class="fas fa-download"></i> 导出
+                    </button>
+                </div>
+            </div>
+
+            <div class="log-content" id="logContent">
+                <div class="log-line info">[2023-07-20 10:23:45] [INFO] 系统启动成功，开始初始化...</div>
+                <div class="log-line info">[2023-07-20 10:23:46] [INFO] 加载配置文件: application.yml</div>
+                <div class="log-line debug">[2023-07-20 10:23:47] [DEBUG] 数据库连接池初始化，最大连接数: 20</div>
+                <div class="log-line info">[2023-07-20 10:23:50] [INFO] 缓存服务初始化完成</div>
+                <div class="log-line warn">[2023-07-20 10:23:52] [WARN] 检测到未使用的配置项: server.tomcat.max-threads</div>
+                <div class="log-line info">[2023-07-20 10:23:55] [INFO] 开始加载业务模块...</div>
+                <div class="log-line info">[2023-07-20 10:24:00] [INFO] 用户服务模块初始化完成</div>
+                <div class="log-line info">[2023-07-20 10:24:05] [INFO] 订单服务模块初始化完成</div>
+                <div class="log-line error">[2023-07-20 10:24:10] [ERROR] 支付服务初始化失败: 连接超时 (30秒)</div>
+                <div class="log-line info">[2023-07-20 10:24:15] [INFO] 正在重试支付服务连接...</div>
+                <div class="log-line info">[2023-07-20 10:24:20] [INFO] 支付服务连接成功</div>
+                <div class="log-line info">[2023-07-20 10:24:25] [INFO] 所有服务初始化完成，系统准备就绪</div>
+                <div class="log-line info">[2023-07-20 10:24:30] [INFO] 服务器启动完成，耗时: 45秒</div>
+                <div class="log-line info">[2023-07-20 10:25:00] [INFO] 用户登录: 用户名: 张三, IP: 192.168.1.100</div>
+                <div class="log-line info">[2023-07-20 10:25:05] [INFO] 订单创建: 订单号: ORD20230720001, 金额: ¥1250.00</div>
+                <div class="log-line info">[2023-07-20 10:25:10] [INFO] 支付成功: 订单号: ORD20230720001, 交易号: PAY20230720001</div>
+                <div class="log-line info">[2023-07-20 10:25:15] [INFO] 中文UTF-8测试: 日志系统支持中文字符显示，包括各种标点符号：，。！？；：“”‘’（）【】《》</div>
+            </div>
+
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <div class="indicator" id="statusIndicator"></div>
+                    <span id="statusText">未连接</span>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>日志行数: <span id="lineCount">16</span></span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span>最后更新: <span id="lastUpdate">10:25:15</span></span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-database"></i>
+                        <span>日志大小: <span id="logSize">4.2 KB</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h3 class="feature-title">实时监控</h3>
+            <p class="feature-desc">实时跟踪日志文件变化，即时显示新增内容，类似Linux的tail -f命令功能。</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-language"></i>
+            </div>
+            <h3 class="feature-title">中文UTF-8支持</h3>
+            <p class="feature-desc">完美支持中文字符和UTF-8编码，确保日志中的中文内容正确显示。</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-palette"></i>
+            </div>
+            <h3 class="feature-title">智能高亮</h3>
+            <p class="feature-desc">根据日志级别自动着色，INFO、DEBUG、WARN、ERROR使用不同颜色区分。</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const logContent = document.getElementById('logContent');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const logFileSelect = document.getElementById('logFile');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const lineCountElement = document.getElementById('lineCount');
+        const lastUpdateElement = document.getElementById('lastUpdate');
+        const logSizeElement = document.getElementById('logSize');
+        const currentLogFile = document.getElementById('currentLogFile');
+        const autoScrollCheckbox = document.getElementById('autoScroll');
+        const refreshRateInput = document.getElementById('refreshRate');
+
+        let eventSource = null;
+        let lineCount = 16;
+        let isConnected = false;
+
+        // 更新当前日志文件名显示
+        logFileSelect.addEventListener('change', function() {
+            currentLogFile.textContent = this.value;
+        });
+
+        // 开始监控
+        startBtn.addEventListener('click', function() {
+            if (isConnected) return;
+
+            const logFileName = logFileSelect.value;
+            startMonitoring(logFileName);
+        });
+
+        // 停止监控
+        stopBtn.addEventListener('click', function() {
+            stopMonitoring();
+        });
+
+        // 清空日志
+        clearBtn.addEventListener('click', function() {
+            logContent.innerHTML = '';
+            lineCount = 0;
+            updateLineCount();
+        });
+
+        // 模拟开始监控
+        function startMonitoring(logFileName) {
+            isConnected = true;
+            statusIndicator.classList.add('connected');
+            statusText.textContent = '已连接 - ' + logFileName;
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+
+            // 模拟添加新日志行
+            const interval = setInterval(() => {
+                if (!isConnected) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                const now = new Date();
+                const timestamp = `[${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}]`;
+
+                // 随机生成日志级别
+                const levels = ['INFO', 'DEBUG', 'WARN', 'ERROR'];
+                const level = levels[Math.floor(Math.random() * levels.length)];
+
+                // 随机日志内容
+                const messages = [
+                    `用户登录: 用户名: 用户${Math.floor(Math.random() * 1000)}, IP: 192.168.1.${Math.floor(Math.random() * 255)}`,
+                    `订单创建: 订单号: ORD${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}${Math.floor(Math.random()*1000)}, 金额: ¥${(Math.random()*1000).toFixed(2)}`,
+                    `数据库查询: SELECT * FROM users WHERE id = ${Math.floor(Math.random() * 1000)}`,
+                    `缓存命中率: ${(Math.random()*100).toFixed(1)}%`,
+                    `API请求: /api/v1/products, 响应时间: ${(Math.random()*300).toFixed(2)}ms`,
+                    `支付处理: 交易号: PAY${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}${Math.floor(Math.random()*10000)}, 状态: 成功`,
+                    `系统资源: CPU: ${(Math.random()*100).toFixed(1)}%, 内存: ${(Math.random()*80 + 20).toFixed(1)}%`,
+                    `安全警告: 检测到可疑登录尝试, IP: 58.32.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
+                    `中文测试: 这是一个UTF-8编码的中文日志消息，包含各种字符：，。！？；：“”‘’（）【】《》`,
+                    `错误报告: 在文件${['UserService.java', 'OrderController.java', 'PaymentGateway.js'][Math.floor(Math.random()*3)]}的第${Math.floor(Math.random()*200)}行发生空指针异常`
+                ];
+
+                const message = messages[Math.floor(Math.random() * messages.length)];
+
+                addLogLine(`${timestamp} [${level}] ${message}`, level.toLowerCase());
+
+                // 更新最后更新时间
+                lastUpdateElement.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+            }, parseInt(refreshRateInput.value));
+        }
+
+        // 停止监控
+        function stopMonitoring() {
+            isConnected = false;
+            statusIndicator.classList.remove('connected');
+            statusText.textContent = '已断开';
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+
+        // 添加日志行
+        function addLogLine(text, level) {
+            const logLine = document.createElement('div');
+            logLine.className = `log-line ${level}`;
+            logLine.textContent = text;
+            logContent.appendChild(logLine);
+
+            lineCount++;
+            updateLineCount();
+
+            // 自动滚动
+            if (autoScrollCheckbox.checked) {
+                logContent.scrollTop = logContent.scrollHeight;
+            }
+        }
+
+        // 更新行数显示
+        function updateLineCount() {
+            lineCountElement.textContent = lineCount;
+            logSizeElement.textContent = (lineCount * 120 / 1024).toFixed(1) + ' KB';
+        }
+
+        // 补零函数
+        function pad(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        // 初始化最后更新时间
+        const now = new Date();
+        lastUpdateElement.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    });
+</script>
+</body>
+</html>
