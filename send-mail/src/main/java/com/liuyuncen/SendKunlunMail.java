@@ -6,6 +6,7 @@ import javax.mail.internet.MimeMessage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+
 /**
  * @belongsProject: 测试平台
  * @belongsPackage: com.liuyuncen
@@ -14,11 +15,9 @@ import java.util.Properties;
  * @description: TODO
  * @version: 1.0
  */
-public class SendMail {
+public class SendKunlunMail {
     public static void main(String[] args) {
         String to = "yuncenliu@163.com";
-//        String to = "18333609932@163.com";
-//        String to = "zhanghaonan@kunlunhealth.com";
 
 
         for (String arg : args) {
@@ -39,29 +38,25 @@ public class SendMail {
         final String username = "data_alarm@kunlunhealth.com";
         final String password = "kkwe2ZngQCA2VC4j";
 
-//        final String username = "array_xiangxiang@163.com";
-//        final String password = "MEODMDFOOKFAMPQP";
-
-//        String hosts = "fastsmtphz.qiye.163.com";
         String hosts = "mail.kunlunhealth.com";
         String port = "25";
-
-//        final String username = "data@kunlunhealth.com";
-//        final String password = "w4XQbwGz5Tg2tjNB";
 
         // 设置属性
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", hosts);  // kunlun 真实ip
-//        props.put("mail.smtp.host", "mail.kunlunhealth.com");
-//        props.put("mail.smtp.host", "smtp.163.com");  // 我的 163
+        props.put("mail.smtp.starttls.required", "true");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.put("mail.debug", "true");
+        props.put("mail.smtp.host", hosts);
         props.put("mail.smtp.port", port);
+        // 添加超时设置
+        props.put("mail.smtp.connectiontimeout", "10000");  // 10秒连接超时
+        props.put("mail.smtp.timeout", "10000");  // 10秒读写超时
 
         SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = sim.format(new Date());
         System.out.println("date = " + format);
-
         System.out.println("hosts = " + hosts);
         System.out.println("port = " + port);
         System.out.println("from = " + username);
