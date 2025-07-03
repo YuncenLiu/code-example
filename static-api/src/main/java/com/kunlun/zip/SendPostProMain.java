@@ -30,7 +30,7 @@ public class SendPostProMain {
         jsonObject.put("timestamp",nowTime);
 
         JSONObject reqMsgJson = new JSONObject();
-        reqMsgJson.put("timestamp","2025-01-17 10:41:43");
+        reqMsgJson.put("timestamp","2025-07-03 10:04:34");
         reqMsgJson.put("orgCode","s_meixin_sftp");
         reqMsgJson.put("dataTypeCode","SP");
         jsonObject.put("reqMsg",reqMsgJson);
@@ -40,7 +40,8 @@ public class SendPostProMain {
         String encrypt = AESExample.encrypt(reqMsg, key, iv);
 
         // API URL
-        String url = "https://inner.klhic.com/service";
+//        String url = "https://inner.klhic.com/service";
+        String url = "https://api.kunlunhealth.com.cn/service";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
