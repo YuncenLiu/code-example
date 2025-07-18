@@ -23,6 +23,21 @@
             <version>1.18.28</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.12.0</version>
+        </dependency>
         <!--
         官网：https://openjdk.org/projects/code-tools/jol/
         定位：分析对象在 JVM 的大小和分布

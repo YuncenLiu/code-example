@@ -36,27 +36,19 @@
         </dependency>
 
 
-<<<<<<< HEAD
-<!--        <dependency>-->
-<!--            <groupId>liuyuncen.com</groupId>-->
-<!--            <artifactId>gbase-connector-java</artifactId>-->
-<!--            <version>9.5.0.7-build1-bin</version>-->
-<!--            <type>jar</type>-->
-<!--        </dependency>-->
-=======
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version> <!-- 使用最新版本 -->
         </dependency>
 
-        <dependency>
-            <groupId>liuyuncen.com</groupId>
-            <artifactId>gbase-connector-java</artifactId>
-            <version>9.5.0.7-build1-bin</version>
-            <type>jar</type>
-        </dependency>
->>>>>>> 90aba23165d620e8be6e8e7c55f2994d7cd962e6
+<!--        <dependency>-->
+<!--            <groupId>liuyuncen.com</groupId>-->
+<!--            <artifactId>gbase-connector-java</artifactId>-->
+<!--            <version>9.5.0.7-build1-bin</version>-->
+<!--            <type>jar</type>-->
+<!--        </dependency>-->
     </dependencies>
 
     <properties>
